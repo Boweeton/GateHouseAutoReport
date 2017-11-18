@@ -2,7 +2,7 @@
 
 namespace GHAR_Classes
 {
-    class ReportEntry
+    public class ReportEntry
     {
 
         #region Data
@@ -20,9 +20,8 @@ namespace GHAR_Classes
         #region Properties
 
         public string Name { get; set; }
-        public string Type { get; set; }
-        public DateTime DepartDate { get; set; }
-        public 
+        public GuestType Type { get; set; }
+        public string DepartDate { get; set; }
 
         #endregion
 

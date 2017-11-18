@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GHAR_Classes
 {
-    class MegasysReportParser
+    public class MegasysReportParser
     {
         #region Data
 
@@ -22,7 +24,15 @@ namespace GHAR_Classes
 
         #region Properties
 
+        // Input Data
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+        public List<string> FileLines { get; set; }
 
+        // Reporting Data
+        public List<ReportEntry> OvernightGuests { get; set; }
+        public List<ReportEntry> TourGuests { get; set; }
+        public List<ReportEntry> TeaGuests { get; set; }
 
         #endregion
 
@@ -30,13 +40,92 @@ namespace GHAR_Classes
 
         #region Public Methods
 
+        public void ReadInArrivalsReport(string path)
+        {
+            FileLines = new List<string>();
+            OvernightGuests = new List<ReportEntry>();
+            TeaGuests = new List<ReportEntry>();
 
+            FilePath = path;
+
+            StreamReader sr = new StreamReader(FilePath);
+
+            // Read in the raw lines
+            while (!sr.EndOfStream)
+            {
+                FileLines.Add(sr.ReadLine());
+            }
+
+            // Process the raw lines into ReportEntry objects
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (string line in FileLines)
+            {
+                if (line.Length >= 59)
+                {
+                    string checkString = line.Remove(0, 49);
+                    checkString = checkString.Substring(0, 9);
+
+                    // If a line is found with a formatted date in index 50
+                    if (IsCorrectDateFormat(checkString))
+                    {
+                        ReportEntry tmpEntry = new ReportEntry();
+                        string tmpLine = line;
+
+                        // Strip off everything before the name
+                        tmpLine = tmpLine.Remove(0, 12);
+
+                        // Read in the name
+                        tmpEntry.Name = tmpLine.Substring(0, 16);
+
+                        // Strip off everything until "Cres" (Entry.type)
+                        tmpLine = tmpLine.Remove(0, 29);
+
+                        // Read in the Type
+                        string check = tmpLine.Substring(0, 4);
+                        if (check == "TEAM" || check == "TEMP")
+                        {
+                            tmpEntry.Type = GuestType.Tea;
+                        }
+                        else
+                        {
+                            tmpEntry.Type = GuestType.Overnight;
+                        }
+
+                        // Strip off everything until date
+                        tmpLine = tmpLine.Remove(0, 9);
+
+                        // Read in the Date
+                        tmpEntry.DepartDate = tmpLine.Substring(0, 8);
+
+                        // Add in the Entry
+                        if (tmpEntry.Type == GuestType.Overnight)
+                        {
+                            OvernightGuests.Add(tmpEntry);
+                        }
+                        else
+                        {
+                            TeaGuests.Add(tmpEntry);
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
 
         #region Private Methods
 
+        bool IsCorrectDateFormat(string input)
+        {
+            string c1 = input.Substring(3, 1);
+            string c2 = input.Substring(6, 1);
 
+            if (c1 == "/" && c2 == "/")
+            {
+                return true;
+            }
+            return false;
+        }
 
         #endregion
 
