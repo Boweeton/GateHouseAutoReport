@@ -25,8 +25,6 @@ namespace GHAR_Classes
         #region Properties
 
         // Input Data
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
         public List<string> FileLines { get; set; }
 
         // Reporting Data
@@ -46,9 +44,7 @@ namespace GHAR_Classes
             OvernightGuests = new List<ReportEntry>();
             TeaGuests = new List<ReportEntry>();
 
-            FilePath = path;
-
-            StreamReader sr = new StreamReader(FilePath);
+            StreamReader sr = new StreamReader(path);
 
             // Read in the raw lines
             while (!sr.EndOfStream)
@@ -118,11 +114,42 @@ namespace GHAR_Classes
             }
         }
 
+        public void ReadInToursReport(string path)
+        {
+            FileLines = new List<string>();
+            TourGuests = new List<ReportEntry>();
+
+            StreamReader sr = new StreamReader(path);
+
+            // Read in the raw lines
+            while (!sr.EndOfStream)
+            {
+                FileLines.Add(sr.ReadLine());
+            }
+
+            // Process the raw lines into ReportEntry objects
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (string line in FileLines)
+            {
+                if (line.Length > 50)
+                {
+                    string checkString = line.Substring(0, 9);
+
+                    // If a line is found with a formatted date in index 0
+                    if (IsCorrectDateFormat(checkString))
+                    {
+                        ReportEntry tmpEntry = new ReportEntry();
+                        string tmpLine = line;
+                    }
+                }
+            }
+        }
+
         #endregion
 
-        #region Private Methods
+            #region Private Methods
 
-        bool IsCorrectDateFormat(string input)
+            bool IsCorrectDateFormat(string input)
         {
             string c1 = input.Substring(3, 1);
             string c2 = input.Substring(6, 1);
