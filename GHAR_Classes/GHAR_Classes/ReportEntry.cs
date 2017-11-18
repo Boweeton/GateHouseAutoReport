@@ -22,6 +22,7 @@ namespace GHAR_Classes
         public string Name { get; set; }
         public GuestType Type { get; set; }
         public string DepartDate { get; set; }
+        public string DisplayTime { get; set; }
 
         #endregion
 

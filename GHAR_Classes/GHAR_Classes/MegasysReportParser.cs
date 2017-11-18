@@ -82,13 +82,20 @@ namespace GHAR_Classes
 
                         // Read in the Type
                         string check = tmpLine.Substring(0, 4);
-                        if (check == "TEAM" || check == "TEMP")
+                        if (check == "TEAM")
                         {
                             tmpEntry.Type = GuestType.Tea;
+                            tmpEntry.DisplayTime = "11:00 AM";
+                        }
+                        else if (check == "TEPM")
+                        {
+                            tmpEntry.Type = GuestType.Tea;
+                            tmpEntry.DisplayTime = "2:30 AM";
                         }
                         else
                         {
                             tmpEntry.Type = GuestType.Overnight;
+                            tmpEntry.DisplayTime = "-";
                         }
 
                         // Strip off everything until date
