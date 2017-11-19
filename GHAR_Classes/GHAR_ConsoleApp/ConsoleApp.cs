@@ -18,8 +18,8 @@ namespace GHAR_ConsoleApp
 
             // am.OpenNotepad();
 
-            reportParser.ReadInArrivalsReport(@"D:\testArrivals.txt");
-            //reportParser.ReadInToursReport(@"D:\testTours.txt");
+            reportParser.ReadInArrivalsReport(@"I:\testArrivals.txt");
+            //reportParser.ReadInToursReport(@"I:\testTours.txt");
 
             const int o1 = 22;
             const int o2 = 14;
