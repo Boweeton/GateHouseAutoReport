@@ -14,7 +14,10 @@ namespace GHAR_ConsoleApp
             ApplicationManipulator am = new ApplicationManipulator();
             MegasysReportParser reportParser = new MegasysReportParser();
 
-            //am.OpenNotepad();
+            for (int i = 0; i < 3; i++)
+            {
+                am.OpenNotepad();
+            }
 
             reportParser.ReadInArrivalsReport(@"I:\testArrivals.txt");
             reportParser.ReadInToursReport(@"I:\testTours.txt");
@@ -68,15 +71,7 @@ namespace GHAR_ConsoleApp
 
             // Count up Day Passes
             Console.WriteLine();
-            int extraSheets;
-            if (toursAndTeas.Count%3 == 0)
-            {
-                extraSheets = 0;
-            }
-            else
-            {
-                extraSheets = 1;
-            }
+            int extraSheets = toursAndTeas.Count%3 == 0 ? 0 : 1;
 
             Console.WriteLine($"Total Day Passes: {toursAndTeas.Count}\t({toursAndTeas.Count} = {(toursAndTeas.Count / 3) + extraSheets} sheets)");
 
@@ -119,9 +114,9 @@ namespace GHAR_ConsoleApp
                 Console.WriteLine($"{date.Substring(0,5)}  =  {count} passes");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Hit any key to close.");
-            Console.ReadKey();
+            //Console.WriteLine();
+            //Console.WriteLine("Hit any key to close.");
+            //Console.ReadKey();
         }
     }
 }
