@@ -102,6 +102,12 @@ namespace GHAR_Classes
                         // Read in the Date
                         tmpEntry.DepartDate = tmpLine.Substring(0, 8);
 
+                        // Strip off 41 chars
+                        tmpLine = tmpLine.Remove(0, 41);
+
+                        // Read in the Date
+                        tmpEntry.GuestCount = int.Parse(tmpLine.Substring(0, 2));
+
                         // Add in the Entry
                         if (tmpEntry.Type == GuestType.Overnight)
                         {
@@ -161,6 +167,12 @@ namespace GHAR_Classes
 
                         // Read in the Name
                         tmpEntry.Name = tmpLine.Substring(0, 20);
+
+                        // Strip off 20 chars
+                        tmpLine = tmpLine.Remove(0, 20);
+
+                        // Read in the Guest Count
+                        tmpEntry.GuestCount = int.Parse(tmpLine.Substring(0, 2));
 
                         // Store the entry
                         TourGuests.Add(tmpEntry);
