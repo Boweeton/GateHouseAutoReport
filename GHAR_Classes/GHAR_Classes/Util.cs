@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
+using GHAR_Classes;
 
 namespace QEG_Classes
 {
@@ -43,6 +43,12 @@ namespace QEG_Classes
             return str.Length - str.Replace("\n", "").Length + 1;
         }
 
+        /// <summary>
+        /// Returns count of occurences of the provided sub-string within the provided larger string.
+        /// </summary>
+        /// <param name="wholeString"></param>
+        /// <param name="subString"></param>
+        /// <returns></returns>
         [SuppressMessage("ReSharper", "StringLastIndexOfIsCultureSpecific.2")]
         public static List<int> AllIndexesOf(this string wholeString, string subString)
         {
@@ -68,12 +74,6 @@ namespace QEG_Classes
 
             return indexes;
         }
-
-        #endregion
-
-        #region Protected Methods
-
-
 
         #endregion
 

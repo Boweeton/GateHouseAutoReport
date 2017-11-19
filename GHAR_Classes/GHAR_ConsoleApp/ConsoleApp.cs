@@ -12,35 +12,52 @@ namespace GHAR_ConsoleApp
             ApplicationManipulator am = new ApplicationManipulator();
             MegasysReportParser reportParser = new MegasysReportParser();
 
-            Console.WriteLine("Hit any key to begin.");
-            Console.ReadKey();
-            Console.Clear();
-
             // am.OpenNotepad();
 
             reportParser.ReadInArrivalsReport(@"I:\testArrivals.txt");
-            //reportParser.ReadInToursReport(@"I:\testTours.txt");
+            reportParser.ReadInToursReport(@"I:\testTours.txt");
 
-            const int o1 = 22;
-            const int o2 = 14;
-            const int o3 = 14;
+            List<ReportEntry> toursAndTeas = reportParser.TourGuests.ToList();
+            toursAndTeas.AddRange(reportParser.TeaGuests);
 
-            reportParser.TeaGuests = new List<ReportEntry>(reportParser.TeaGuests.OrderBy(reportEntry => reportEntry.Name));
-            reportParser.TeaGuests = new List<ReportEntry>(reportParser.TeaGuests.OrderBy(reportEntry => reportEntry.DisplayTime));
-            reportParser.OvernightGuests = new List<ReportEntry>(reportParser.OvernightGuests.OrderBy(reportEntry => reportEntry.Name));
+            const int O1 = 22;
+            const int O2 = 14;
+            const int O3 = 14;
+
+            reportParser.TeaGuests = reportParser.TeaGuests.OrderBy(reportEntry => reportEntry.Name).ToList();
+            reportParser.TeaGuests = reportParser.TeaGuests.OrderBy(reportEntry => reportEntry.DisplayTime).ToList();
+            reportParser.TourGuests = reportParser.TourGuests.OrderBy(reportEntry => reportEntry.Name).ToList();
+            reportParser.OvernightGuests = reportParser.OvernightGuests.OrderBy(reportEntry => reportEntry.Name).ToList();
 
 
-            Console.WriteLine($"{"Name",-o1}{"Time",-o2}{"Type",-o3}Departure");
+            Console.WriteLine($"{"Name",-O1}{"Time",-O2}{"Type",-O3}Departure");
             Console.WriteLine();
-            foreach (ReportEntry entry in reportParser.TeaGuests)
+
+            toursAndTeas = toursAndTeas.OrderBy(reportEntry => reportEntry.Type).ToList();
+            toursAndTeas = toursAndTeas.OrderBy(reportEntry => reportEntry.Name).ToList();
+            toursAndTeas = toursAndTeas.OrderBy(reportEntry => reportEntry.TimeValue).ToList();
+
+            GuestType? prevType = null;
+            string prevTime = null;
+            foreach (ReportEntry entry in toursAndTeas)
             {
-                Console.WriteLine($"{entry.Name, -o1}{entry.DisplayTime,-o2}{entry.Type,-o3}{entry.DepartDate}");
+                // Break a line if needed
+                if (entry.Type != prevType || entry.DisplayTime != prevTime)
+                {
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine($"{entry.Name, -O1}{entry.DisplayTime,-O2}{entry.Type,-O3}{entry.DepartDate}");
+                prevType = entry.Type;
+                prevTime = entry.DisplayTime;
             }
             Console.WriteLine();
+
             foreach (ReportEntry entry in reportParser.OvernightGuests)
             {
-                Console.WriteLine($"{entry.Name,-o1}{entry.DisplayTime,-o2}{entry.Type,-o3}{entry.DepartDate}");
+                Console.WriteLine($"{entry.Name,-O1}{entry.DisplayTime,-O2}{entry.Type,-O3}{entry.DepartDate}");
             }
+            Console.WriteLine();
 
             Console.WriteLine("Hit any key to close.");
             Console.ReadKey();

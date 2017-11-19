@@ -82,11 +82,13 @@ namespace GHAR_Classes
                         {
                             tmpEntry.Type = GuestType.Tea;
                             tmpEntry.DisplayTime = "11:00 AM";
+                            tmpEntry.CalculateTimeValue();
                         }
                         else if (check == "TEPM")
                         {
                             tmpEntry.Type = GuestType.Tea;
-                            tmpEntry.DisplayTime = "2:30 AM";
+                            tmpEntry.DisplayTime = "2:30 PM";
+                            tmpEntry.CalculateTimeValue();
                         }
                         else
                         {
@@ -140,6 +142,28 @@ namespace GHAR_Classes
                     {
                         ReportEntry tmpEntry = new ReportEntry();
                         string tmpLine = line;
+
+                        // Read out the date
+                        tmpEntry.DepartDate = tmpLine.Substring(0, 9);
+
+                        // Strip off 11 chars
+                        tmpLine = tmpLine.Remove(0, 11);
+
+                        // Read the Time (and add an 'M' onto the end)
+                        tmpEntry.DisplayTime = $"{tmpLine.Substring(0, 4)} {tmpLine.Substring(4, 1)}M";
+                        tmpEntry.CalculateTimeValue();
+
+                        // Read in the Type
+                        tmpEntry.Type = GuestType.Tour;
+
+                        // Strip off 25 chars
+                        tmpLine = tmpLine.Remove(0, 25);
+
+                        // Read in the Name
+                        tmpEntry.Name = tmpLine.Substring(0, 20);
+
+                        // Store the entry
+                        TourGuests.Add(tmpEntry);
                     }
                 }
             }
@@ -147,19 +171,12 @@ namespace GHAR_Classes
 
         #endregion
 
-            #region Private Methods
+        #region Private Methods
 
             bool IsCorrectDateFormat(string input)
-        {
-            string c1 = input.Substring(3, 1);
-            string c2 = input.Substring(6, 1);
-
-            if (c1 == "/" && c2 == "/")
             {
-                return true;
+                return DateTime.TryParse(input, out DateTime dateValue);
             }
-            return false;
-        }
 
         #endregion
 
