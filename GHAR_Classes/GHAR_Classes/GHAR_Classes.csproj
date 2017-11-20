@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManipulator.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="GuestType.cs" />
     <Compile Include="MegasysReportParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

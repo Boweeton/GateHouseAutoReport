@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GHAR_Classes
 {
@@ -31,12 +27,30 @@ namespace GHAR_Classes
         public List<ReportEntry> OvernightGuests { get; set; }
         public List<ReportEntry> TourGuests { get; set; }
         public List<ReportEntry> TeaGuests { get; set; }
+        public List<Event> EventsToday { get; set; }
 
         #endregion
 
         #region Methods
 
         #region Public Methods
+
+        public void SetEventsByFall2017()
+        {
+            EventsToday = new List<Event>();
+
+            Event tmp = new Event { Title = "Overnight", CresCode = string.Empty, MultiEventCode = "(Ov)", Time = "0:00 AM"};
+            EventsToday.Add(tmp);
+
+            tmp = new Event { Title = "Tea - 11:00 AM", CresCode = "TEAM", MultiEventCode = "(TE11a)", Time = "11:00 AM" };
+            EventsToday.Add(tmp);
+
+            tmp = new Event { Title = "Tour - 1:00 PM", CresCode = "TOUR", MultiEventCode = "(TR1p)", Time = "1:00 PM" };
+            EventsToday.Add(tmp);
+
+            tmp = new Event { Title = "Tea - 2:30 PM", CresCode = "TEPM", MultiEventCode = "(TE2.5p)", Time = "2:30 PM" };
+            EventsToday.Add(tmp);
+        }
 
         public void ReadInArrivalsReport(string path)
         {
@@ -133,63 +147,9 @@ namespace GHAR_Classes
             }
         }
 
-        public void ReadInToursReport(string path)
+        public string ToStringForTeasAndTours()
         {
-            FileLines = new List<string>();
-            TourGuests = new List<ReportEntry>();
-
-            StreamReader sr = new StreamReader(path);
-
-            // Read in the raw lines
-            while (!sr.EndOfStream)
-            {
-                FileLines.Add(sr.ReadLine());
-            }
-
-            // Process the raw lines into ReportEntry objects
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (string line in FileLines)
-            {
-                if (line.Length > 50)
-                {
-                    string checkString = line.Substring(0, 9);
-
-                    // If a line is found with a formatted date in index 0
-                    if (IsCorrectDateFormat(checkString))
-                    {
-                        ReportEntry tmpEntry = new ReportEntry();
-                        string tmpLine = line;
-
-                        // Read out the date
-                        tmpEntry.DepartDate = tmpLine.Substring(0, 9);
-
-                        // Strip off 11 chars
-                        tmpLine = tmpLine.Remove(0, 11);
-
-                        // Read the Time (and add an 'M' onto the end)
-                        tmpEntry.DisplayTime = $"{tmpLine.Substring(0, 4)} {tmpLine.Substring(4, 1)}M";
-                        tmpEntry.CalculateTimeValue();
-
-                        // Read in the Type
-                        tmpEntry.Type = GuestType.Tour;
-
-                        // Strip off 25 chars
-                        tmpLine = tmpLine.Remove(0, 25);
-
-                        // Read in the Name
-                        tmpEntry.Name = tmpLine.Substring(0, 20);
-
-                        // Strip off 20 chars
-                        tmpLine = tmpLine.Remove(0, 20);
-
-                        // Read in the Guest Count
-                        tmpEntry.GuestCount = int.Parse(tmpLine.Substring(0, 2));
-
-                        // Store the entry
-                        TourGuests.Add(tmpEntry);
-                    }
-                }
-            }
+            
         }
 
         #endregion

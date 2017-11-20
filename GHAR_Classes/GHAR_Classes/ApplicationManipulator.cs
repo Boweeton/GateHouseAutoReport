@@ -12,6 +12,15 @@ namespace GHAR_Classes
         [DllImport("User32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
 
+        public void TestOnNotepad()
+        {
+            Process p = Process.Start("Notepad.exe");
+
+            Console.WriteLine(p.ProcessName);
+            Console.WriteLine(p.ProcessName);
+            Console.WriteLine(p.ProcessName);
+        }
+
         public void RunMagasysArrivalsReport(string startDate, string endDate)
         {
             // Local Declarations
