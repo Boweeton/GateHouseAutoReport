@@ -43,6 +43,7 @@ namespace GHAR_Classes
             FileLines = new List<string>();
             OvernightGuests = new List<ReportEntry>();
             TeaGuests = new List<ReportEntry>();
+            TourGuests = new List<ReportEntry>();
 
             StreamReader sr = new StreamReader(path);
 
@@ -90,6 +91,12 @@ namespace GHAR_Classes
                             tmpEntry.DisplayTime = "2:30 PM";
                             tmpEntry.CalculateTimeValue();
                         }
+                        else if (check == "TOUR")
+                        {
+                            tmpEntry.Type = GuestType.Tour;
+                            tmpEntry.DisplayTime = "1:00 PM";
+                            tmpEntry.CalculateTimeValue();
+                        }
                         else
                         {
                             tmpEntry.Type = GuestType.Overnight;
@@ -109,13 +116,17 @@ namespace GHAR_Classes
                         tmpEntry.GuestCount = int.Parse(tmpLine.Substring(0, 2));
 
                         // Add in the Entry
-                        if (tmpEntry.Type == GuestType.Overnight)
+                        switch (tmpEntry.Type)
                         {
-                            OvernightGuests.Add(tmpEntry);
-                        }
-                        else
-                        {
-                            TeaGuests.Add(tmpEntry);
+                            case GuestType.Overnight:
+                                OvernightGuests.Add(tmpEntry);
+                                break;
+                            case GuestType.Tour:
+                                TourGuests.Add(tmpEntry);
+                                break;
+                            default:
+                                TeaGuests.Add(tmpEntry);
+                                break;
                         }
                     }
                 }
