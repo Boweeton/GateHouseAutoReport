@@ -167,19 +167,28 @@ namespace GHAR_Classes
                             // Find the correct roster
                             if (tmpRes.Type == eventRoster.Type && tmpRes.DisplayTime == eventRoster.Time)
                             {
+                                bool wasFound = false;
                                 // Check if the roster yet contains the reservation
-                                foreach (RosterReservation res in eventRoster.Reservations)
+                                for (int i = 0; i < eventRoster.Reservations.Count; i++)
                                 {
-                                    if (eventRoster.Reservations.Contains(tmpRes))
+                                    RosterReservation res = eventRoster.Reservations[i];
+
+                                    // If it
+                                    if (tmpRes.Name == res.Name)
                                     {
-                                        int index = eventRoster.Reservations.IndexOf(tmpRes);
-                                        eventRoster.Reservations[index].EntryCount++;
+                                        wasFound = true;
+                                        eventRoster.Reservations[i].EntryCount++;
+
+                                        if (tmpRes.GuestCount > eventRoster.Reservations[i].GuestCount)
+                                        {
+                                            eventRoster.Reservations[i].GuestCount = tmpRes.GuestCount;
+                                        }
                                     }
-                                    else
-                                    {
-                                        tmpRes.EntryCount = 1;
-                                        eventRoster.Reservations.Add(tmpRes);
-                                    }
+                                }
+                                if (!wasFound)
+                                {
+                                    tmpRes.EntryCount = 1;
+                                    eventRoster.Reservations.Add(tmpRes);
                                 }
                             }
                         }
