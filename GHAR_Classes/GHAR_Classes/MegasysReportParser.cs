@@ -26,17 +26,13 @@ namespace GHAR_Classes
         // Reporting Data
         public List<EventRoster> ListOfEvents { get; set; }
 
-        public List<RosterReservation> OvernightGuests { get; set; }
-        public List<RosterReservation> TourGuests { get; set; }
-        public List<RosterReservation> TeaGuests { get; set; }
-
         #endregion
 
         #region Methods
 
         #region Public Methods
 
-        public void SetEventsByFall2017()
+        public void SetEventsByLowSeasonDefault()
         {
             ListOfEvents = new List<EventRoster>();
 
@@ -88,9 +84,6 @@ namespace GHAR_Classes
         public void ReadInArrivalsReport(string path)
         {
             FileLines = new List<string>();
-            OvernightGuests = new List<RosterReservation>();
-            TeaGuests = new List<RosterReservation>();
-            TourGuests = new List<RosterReservation>();
 
             StreamReader sr = new StreamReader(path);
 
@@ -169,19 +162,17 @@ namespace GHAR_Classes
                             {
                                 bool wasFound = false;
                                 // Check if the roster yet contains the reservation
-                                for (int i = 0; i < eventRoster.Reservations.Count; i++)
+                                foreach (RosterReservation res in eventRoster.Reservations)
                                 {
-                                    RosterReservation res = eventRoster.Reservations[i];
-
-                                    // If it
+                                    // If it is already in the roster
                                     if (tmpRes.Name == res.Name)
                                     {
                                         wasFound = true;
-                                        eventRoster.Reservations[i].EntryCount++;
+                                        res.EntryCount++;
 
-                                        if (tmpRes.GuestCount > eventRoster.Reservations[i].GuestCount)
+                                        if (tmpRes.GuestCount > res.GuestCount)
                                         {
-                                            eventRoster.Reservations[i].GuestCount = tmpRes.GuestCount;
+                                            res.GuestCount = tmpRes.GuestCount;
                                         }
                                     }
                                 }

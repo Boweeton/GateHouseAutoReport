@@ -22,7 +22,10 @@ namespace GHAR_Classes
 
         #region Methods
 
-        
+        public override string ToString()
+        {
+            return Title;
+        }
 
         #endregion
     }
