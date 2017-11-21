@@ -1,6 +1,8 @@
-﻿namespace GHAR_Classes
+﻿using System.Collections.Generic;
+
+namespace GHAR_Classes
 {
-    public class Event
+    public class EventRoster
     {
         #region Constructors
 
@@ -11,15 +13,16 @@
         #region Properties
 
         public string Title { get; set; }
-        public string CresCode { get; set; }
+        public GuestType Type { get; set; }
         public string Time { get; set; }
         public string MultiEventCode { get; set; }
+        public List<RosterReservation> Reservations { get; set; }
 
         #endregion
 
         #region Methods
 
-
+        
 
         #endregion
     }

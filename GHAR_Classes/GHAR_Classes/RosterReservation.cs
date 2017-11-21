@@ -1,7 +1,7 @@
 ﻿
 namespace GHAR_Classes
 {
-    public class ReportEntry
+    public class RosterReservation
     {
 
         #region Data
@@ -20,6 +20,7 @@ namespace GHAR_Classes
 
         public string Name { get; set; }
         public int GuestCount { get; set; }
+        public int EntryCount { get; set; }
         public GuestType Type { get; set; }
         public string DepartDate { get; set; }
         public string DisplayTime { get; set; }

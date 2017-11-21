@@ -22,10 +22,11 @@ namespace GHAR_ConsoleApp
 
             //am.RunMagasysArrivalsReport(date, date);
 
+            reportParser.SetEventsByFall2017();
             reportParser.ReadInArrivalsReport(@"D:\AutoReport_[RptOf11.25.2017]_[CrtOn11-19-17--10.32.25PM].txt");
             //reportParser.ReadInToursReport(@"I:\testTours.txt");
 
-            List<ReportEntry> toursAndTeas = reportParser.TourGuests.ToList();
+            List<RosterReservation> toursAndTeas = reportParser.TourGuests.ToList();
             toursAndTeas.AddRange(reportParser.TeaGuests);
 
             const int O1 = 22;
@@ -50,7 +51,7 @@ namespace GHAR_ConsoleApp
             string prevTime = null;
             bool firstRun = true;
             int count = 0;
-            foreach (ReportEntry entry in toursAndTeas)
+            foreach (RosterReservation entry in toursAndTeas)
             {
                 // Break a line if needed
                 if ((entry.Type != prevType || entry.DisplayTime != prevTime) && firstRun == false)
@@ -84,7 +85,7 @@ namespace GHAR_ConsoleApp
             Console.WriteLine($"{"Name",-O1}{"Time",-O2}{"Count",-O3}{"Type",-O4}Departure");
             Console.WriteLine();
 
-            foreach (ReportEntry entry in reportParser.OvernightGuests)
+            foreach (RosterReservation entry in reportParser.OvernightGuests)
             {
                 Console.WriteLine($"{entry.Name,-O1}{entry.DisplayTime,-O2}{entry.GuestCount,-O3}{entry.Type,-O4}{entry.DepartDate}");
             }
@@ -94,7 +95,7 @@ namespace GHAR_ConsoleApp
 
             // Find what departure dates are present
             List<string> overnightPasses = new List<string>();
-            foreach (ReportEntry entry in reportParser.OvernightGuests)
+            foreach (RosterReservation entry in reportParser.OvernightGuests)
             {
                 if (!overnightPasses.Contains(entry.DepartDate))
                 {
@@ -107,7 +108,7 @@ namespace GHAR_ConsoleApp
             foreach (string date in overnightPasses)
             {
                 count = 0;
-                foreach (ReportEntry entry in reportParser.OvernightGuests)
+                foreach (RosterReservation entry in reportParser.OvernightGuests)
                 {
                     if (entry.DepartDate == date)
                     {
