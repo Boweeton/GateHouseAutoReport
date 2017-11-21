@@ -23,7 +23,11 @@ namespace GHAR_ConsoleApp
             //am.RunMagasysArrivalsReport(date, date);
 
             reportParser.SetEventsByLowSeasonDefault();
-            reportParser.ReadInArrivalsReport(@"I:\AutoReport_[RptOf11.30.2017]_[CrtOn11-19-17--10.34.37PM].txt");
+            reportParser.ReadInArrivalsReport(@"D:\AutoReport_[RptOf11.22.2017]_[CrtOn11-19-17--10.30.43PM].txt");
+            reportParser.CalculateValues();
+
+            Console.WriteLine(reportParser.ToStringForTeasAndTours());
+
             //reportParser.ReadInToursReport(@"I:\testTours.txt");
 
             //List<RosterReservation> toursAndTeas = reportParser.TourGuests.ToList();

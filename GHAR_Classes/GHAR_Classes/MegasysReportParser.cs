@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace GHAR_Classes
 {
@@ -25,6 +27,9 @@ namespace GHAR_Classes
 
         // Reporting Data
         public List<EventRoster> ListOfEvents { get; set; }
+        public int DayPasseCount { get; set; }
+        public List<string> OvernightPassDates { get; set; }
+        public List<int> OvernightPassCounts { get; set; }
 
         #endregion
 
@@ -199,10 +204,134 @@ namespace GHAR_Classes
                     }
                 }
             }
-            Console.WriteLine("lolz");
+        }
+
+        public void CalculateValues()
+        {
+            // Calculate the Overnight Passes
+            EventRoster overnightRoster = null;
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (EventRoster roster in ListOfEvents)
+            {
+                if (roster.Type == GuestType.Overnight)
+                {
+                    overnightRoster = roster;
+                }
+            }
+
+            OvernightPassDates = new List<string>();
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (RosterReservation res in overnightRoster.Reservations)
+            {
+                if (!OvernightPassDates.Contains(res.DepartDate))
+                {
+                    OvernightPassDates.Add(res.DepartDate);
+                }
+            }
+
+            OvernightPassDates.Sort();
+
+            OvernightPassCounts = new List<int>();
+            foreach (string date in OvernightPassDates)
+            {
+                OvernightPassCounts.Add(1);
+            }
+
+            foreach (RosterReservation res in overnightRoster.Reservations)
+            {
+                OvernightPassCounts[OvernightPassDates.IndexOf(res.DepartDate)]++;
+            }
+
+            // Calculate Day Passes
+            DayPasseCount = 0;
+
+            foreach (EventRoster roster in ListOfEvents)
+            {
+                if (roster.Type != GuestType.Overnight)
+                {
+                    foreach (RosterReservation res in roster.Reservations)
+                    {
+                        DayPasseCount++;
+                    }
+                }
+            }
+
+            // Calculate reservation's "MultiEvent" codes
+            foreach (EventRoster mainRoster in ListOfEvents)
+            {
+                foreach (RosterReservation mainRes in mainRoster.Reservations)
+                {
+                    mainRes.EventCodes = new List<string>();
+
+                    foreach (EventRoster roster in ListOfEvents)
+                    {
+                        if (roster != mainRoster)
+                        {
+                            foreach (RosterReservation res in roster.Reservations)
+                            {
+                                if (mainRes.Name == res.Name)
+                                {
+                                    if (!mainRes.EventCodes.Contains(roster.MultiEventCode))
+                                    {
+                                        mainRes.EventCodes.Add(roster.MultiEventCode);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public string ToStringForTeasAndTours()
+        {
+            // Local declarations
+            StringBuilder sb = new StringBuilder();
+            const int OffsetAfterName = 18;
+            const int OffsetAfterMEventCode = 16;
+            const int OffsetAfterTime = 10;
+            const int OffsetAfterCount = 10;
+            const int OffsetAfterType = 0;
+
+            // Create header
+            string title = $"Summed Up Report of Teas & Tours for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:h.mm.ss tt})";
+            sb.AppendLine(title);
+            sb.AppendLine();
+
+            string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Time",-OffsetAfterTime}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
+            sb.AppendLine(header);
+            sb.AppendLine();
+
+            foreach (RosterReservation res in ListOfEvents[2].Reservations)
+            {
+                // Assmble "Multi Event Code"
+                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
+                string followMec = mec != string.Empty ? "\"" : string.Empty;
+
+                for (int i = 0; i < res.EntryCount; i++)
+                {
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                    if (i == 0)
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                }
+            }
+            sb.AppendLine();
+
+            // Display pass count
+            int extraSheets = DayPasseCount % 3 == 0 ? 0 : 1;
+            sb.AppendLine($"Day Passes: {DayPasseCount}\t({DayPasseCount} = {(DayPasseCount/3) + extraSheets} Sheets)");
+
+            return sb.ToString();
+        }
+
+        public string ToStringForOvernights()
         {
             return "";
         }

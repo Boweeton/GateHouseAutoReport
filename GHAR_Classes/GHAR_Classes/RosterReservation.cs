@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace GHAR_Classes
 {
     public class RosterReservation
@@ -25,6 +27,7 @@ namespace GHAR_Classes
         public string DepartDate { get; set; }
         public string DisplayTime { get; set; }
         public int TimeValue { get; set; }
+        public List<string> EventCodes { get; set; }
 
         #endregion
 
