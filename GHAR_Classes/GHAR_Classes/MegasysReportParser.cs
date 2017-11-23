@@ -10,7 +10,7 @@ namespace GHAR_Classes
     {
         #region Data
 
-
+        const int MaxTourSize = 25;
 
         #endregion
 
@@ -28,6 +28,7 @@ namespace GHAR_Classes
         // Reporting Data
         public List<EventRoster> ListOfEvents { get; set; }
         public int DayPasseCount { get; set; }
+        public int OvernightPassCount { get; set; }
         public List<string> OvernightPassDates { get; set; }
         public List<int> OvernightPassCounts { get; set; }
 
@@ -208,6 +209,12 @@ namespace GHAR_Classes
 
         public void CalculateValues()
         {
+            // Sort the data
+            foreach (EventRoster roster in ListOfEvents)
+            {
+                roster.Reservations  = roster.Reservations.OrderBy(rosterReservation => rosterReservation.Name).ToList();
+            }
+
             // Calculate the Overnight Passes
             EventRoster overnightRoster = null;
 
@@ -235,12 +242,14 @@ namespace GHAR_Classes
             OvernightPassCounts = new List<int>();
             foreach (string date in OvernightPassDates)
             {
-                OvernightPassCounts.Add(1);
+                OvernightPassCounts.Add(0);
             }
 
+            OvernightPassCount = 0;
             foreach (RosterReservation res in overnightRoster.Reservations)
             {
-                OvernightPassCounts[OvernightPassDates.IndexOf(res.DepartDate)]++;
+                OvernightPassCounts[OvernightPassDates.IndexOf(res.DepartDate)] += res.EntryCount;
+                OvernightPassCount += res.EntryCount;
             }
 
             // Calculate Day Passes
@@ -252,7 +261,7 @@ namespace GHAR_Classes
                 {
                     foreach (RosterReservation res in roster.Reservations)
                     {
-                        DayPasseCount++;
+                        DayPasseCount += res.EntryCount;
                     }
                 }
             }
@@ -295,13 +304,62 @@ namespace GHAR_Classes
             const int OffsetAfterType = 0;
 
             // Create header
-            string title = $"Summed Up Report of Teas & Tours for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:h.mm.ss tt})";
+            string title = $"Summed Up Report of Teas & Tours for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:hh:mm tt})";
             sb.AppendLine(title);
             sb.AppendLine();
 
             string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Time",-OffsetAfterTime}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
             sb.AppendLine(header);
             sb.AppendLine();
+
+            foreach (RosterReservation res in ListOfEvents[0].Reservations)
+            {
+                // Assmble "Multi Event Code"
+                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
+                string followMec = mec != string.Empty ? "\"" : string.Empty;
+
+                for (int i = 0; i < res.EntryCount; i++)
+                {
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                    if (i == 0)
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                }
+            }
+            sb.AppendLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+
+            int tourTotal = 0;
+            foreach (RosterReservation res in ListOfEvents[1].Reservations)
+            {
+                // Increment the tourTotal
+                tourTotal += res.GuestCount;
+
+                // Assmble "Multi Event Code"
+                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
+                string followMec = mec != string.Empty ? "\"" : string.Empty;
+
+                for (int i = 0; i < res.EntryCount; i++)
+                {
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                    if (i == 0)
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                }
+            }
+            sb.AppendLine();
+
+            sb.AppendLine($"Total: {tourTotal}\tRemaining: {MaxTourSize - tourTotal}");
+            sb.AppendLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 
             foreach (RosterReservation res in ListOfEvents[2].Reservations)
             {
@@ -333,7 +391,52 @@ namespace GHAR_Classes
 
         public string ToStringForOvernights()
         {
-            return "";
+            // Local declarations
+            StringBuilder sb = new StringBuilder();
+            const int OffsetAfterName = 18;
+            const int OffsetAfterMEventCode = 16;
+            const int OffsetAfterDate = 14;
+            const int OffsetAfterCount = 10;
+            const int OffsetAfterType = 0;
+
+            // Create header
+            string title = $"Summed Up Report of Overnights for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:hh:mm tt})";
+            sb.AppendLine(title);
+            sb.AppendLine();
+
+            string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Depart-Date",-OffsetAfterDate}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
+            sb.AppendLine(header);
+            sb.AppendLine();
+
+            foreach (RosterReservation res in ListOfEvents[3].Reservations)
+            {
+                // Assmble "Multi Event Code"
+                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
+                string followMec = mec != string.Empty ? "\"" : string.Empty;
+
+                for (int i = 0; i < res.EntryCount; i++)
+                {
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                    if (i == 0)
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                    }
+                }
+            }
+
+            // Print the passes
+            sb.AppendLine();
+            sb.AppendLine($"Overnight Passes: [Total: {OvernightPassCount}]");
+            for (int i = 0; i < OvernightPassDates.Count; i++)
+            {
+                sb.AppendLine($"{OvernightPassDates[i].Substring(0,5)}: {OvernightPassCounts[i]}");
+            }
+
+            return sb.ToString();
         }
 
         #endregion
