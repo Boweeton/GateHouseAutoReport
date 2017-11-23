@@ -9,6 +9,9 @@ namespace GHAR_Classes
 {
     public class ApplicationManipulator
     {
+        // Data
+        public string FilePath { get; set; }
+
         [DllImport("User32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
 
@@ -82,9 +85,8 @@ namespace GHAR_Classes
                 Thread.Sleep(900);
 
                 // Calculate and type the file name
-                string[] splitList = startDate.Split('/');
-                string fileName = $"AutoReport_[RptOf({splitList[0]}.{splitList[1]}.{splitList[2]})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]";
-                SendAndWait(fileName);
+                FilePath = GenerateFileName(startDate);
+                SendAndWait(FilePath);
 
                 // Hit ENTER to save the file as the calculated path & name
                 Thread.Sleep(1200);
@@ -128,6 +130,12 @@ namespace GHAR_Classes
             {
                 SendAndWait(keys, delay);
             }
+        }
+
+        static string GenerateFileName(string date)
+        {
+            string[] splitList = date.Split('/');
+            return $"AutoReport_[RptOf({splitList[0]}.{splitList[1]}.{splitList[2]})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]";
         }
     }
 }

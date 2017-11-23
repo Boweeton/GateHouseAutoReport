@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,13 @@ namespace GHAR_WindowsApp
 
         void OnProgramLoad(object sender, EventArgs e)
         {
-            
+
         }
 
         void OnLaodTodaysGuestlistButtonClick(object sender, EventArgs e)
         {
-
+            StreamWriter sw = new StreamWriter("test.txt");
+            File.CreateText(@"C:\Users\Boweeton\Documents\test.txt");
         }
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
