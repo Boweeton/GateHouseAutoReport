@@ -35,6 +35,7 @@
             this.lastRunTextBox = new System.Windows.Forms.TextBox();
             this.buttonsGroup = new System.Windows.Forms.GroupBox();
             this.lastRunBox = new System.Windows.Forms.GroupBox();
+            this.nothingChangedMessage = new System.Windows.Forms.Label();
             this.buttonsGroup.SuspendLayout();
             this.lastRunBox.SuspendLayout();
             this.SuspendLayout();
@@ -103,11 +104,24 @@
             this.lastRunBox.TabStop = false;
             this.lastRunBox.Text = "Last Run On";
             // 
+            // nothingChangedMessage
+            // 
+            this.nothingChangedMessage.AutoSize = true;
+            this.nothingChangedMessage.BackColor = System.Drawing.Color.Transparent;
+            this.nothingChangedMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nothingChangedMessage.ForeColor = System.Drawing.Color.Firebrick;
+            this.nothingChangedMessage.Location = new System.Drawing.Point(13, 101);
+            this.nothingChangedMessage.Name = "nothingChangedMessage";
+            this.nothingChangedMessage.Size = new System.Drawing.Size(172, 29);
+            this.nothingChangedMessage.TabIndex = 6;
+            this.nothingChangedMessage.Text = "changedStatus";
+            // 
             // MainScreenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 228);
+            this.Controls.Add(this.nothingChangedMessage);
             this.Controls.Add(this.lastRunBox);
             this.Controls.Add(this.buttonsGroup);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -121,6 +135,7 @@
             this.lastRunBox.ResumeLayout(false);
             this.lastRunBox.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -132,6 +147,7 @@
         private System.Windows.Forms.TextBox lastRunTextBox;
         private System.Windows.Forms.GroupBox buttonsGroup;
         private System.Windows.Forms.GroupBox lastRunBox;
+        private System.Windows.Forms.Label nothingChangedMessage;
     }
 }
 

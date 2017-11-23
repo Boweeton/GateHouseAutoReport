@@ -22,7 +22,7 @@ namespace GHAR_ConsoleApp
 
             //am.RunMagasysArrivalsReport(date, date);
 
-            reportParser.SetEventsByLowSeasonDefault();
+            reportParser.ListOfEvents = reportParser.CreateEventLists();
             reportParser.ReadInArrivalsReport(@"D:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt");
             reportParser.CalculateValues();
 

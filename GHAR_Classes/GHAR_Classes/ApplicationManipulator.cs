@@ -85,7 +85,7 @@ namespace GHAR_Classes
                 Thread.Sleep(900);
 
                 // Calculate and type the file name
-                FilePath = GenerateFileName(startDate);
+                FilePath = GeneratePath(startDate);
                 SendAndWait(FilePath);
 
                 // Hit ENTER to save the file as the calculated path & name
@@ -132,7 +132,7 @@ namespace GHAR_Classes
             }
         }
 
-        static string GenerateFileName(string date)
+        public string GeneratePath(string date)
         {
             string[] splitList = date.Split('/');
             return $"AutoReport_[RptOf({splitList[0]}.{splitList[1]}.{splitList[2]})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]";
