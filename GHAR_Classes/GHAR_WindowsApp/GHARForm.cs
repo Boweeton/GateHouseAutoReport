@@ -13,7 +13,7 @@ namespace GHAR_WindowsApp
     {
         // Data
         readonly MegasysReportParser rp;
-        readonly ApplicationManipulator am;
+        ApplicationManipulator am;
         string masterPath;
         List<EventRoster> oldList;
 
@@ -137,6 +137,14 @@ namespace GHAR_WindowsApp
             });
             nothingChangedMessage.Text = string.Empty;
             nothingChangedMessage.BackColor = BackColor;
+        }
+
+        void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
+        {
+            ManualPathForm m = new ManualPathForm(am, rp);
+            m.Show();
+            createOvernightsButton.Enabled = true;
+            createToursAndTeasButton.Enabled = true;
         }
     }
 }

@@ -308,7 +308,7 @@ namespace GHAR_Classes
             sb.AppendLine(title);
             sb.AppendLine();
 
-            string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Time",-OffsetAfterTime}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
+            string header = $"{"Name",-OffsetAfterName}{"Count",-OffsetAfterCount}{"O-Events",-OffsetAfterMEventCode}{"Time",-OffsetAfterTime}{"Type",-OffsetAfterType}";
             sb.AppendLine(header);
             sb.AppendLine();
 
@@ -323,11 +323,11 @@ namespace GHAR_Classes
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (i == 0)
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                     else
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                 }
             }
@@ -348,11 +348,11 @@ namespace GHAR_Classes
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (i == 0)
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                     else
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                 }
             }
@@ -372,11 +372,11 @@ namespace GHAR_Classes
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (i == 0)
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                     else
                     {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
                     }
                 }
             }

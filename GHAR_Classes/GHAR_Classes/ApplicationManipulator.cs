@@ -59,57 +59,58 @@ namespace GHAR_Classes
 
             // Bring Megasys forward
             SetForegroundWindow(correctHandle);
+            SetForegroundWindow(correctHandle);
+            SetForegroundWindow(correctHandle);
 
             // [IMPORTANT] (Here, the program expects the highlighted button in Megasys to be "Favorites")
 
             // Arrow DOWN to the Front Office and TAB over the the selection screen
-            Thread.Sleep(100);
-            if (!SendAndWait(4, "{DOWN}", 30) || !SendAndWait(2, "{TAB}", 150) ||
+            Thread.Sleep(200);
+            if (!SendAndWait(4, "{DOWN}", 90) || !SendAndWait(2, "{TAB}", 200) ||
 
                 // Arrow DOWN to Arrivals
-                !SendAndWait(12, "{DOWN}", 30))
+                !SendAndWait(12, "{DOWN}", 90))
             {
                 return "Failed to tab and select \"Print Arrivals\"";
             }
 
             // Hit ENTER
-            Thread.Sleep(500);
+            Thread.Sleep(400);
             if (!SendAndWait("{ENTER}"))
             {
                 return "Failed to tab and select \"Print Arrivals\"";
             }
 
             // Arrow DOWN to select FILE output for the print selection
-            Thread.Sleep(1500);
-            if (!SendAndWait(16, "{DOWN}", 30))
+            Thread.Sleep(1200);
+            //SendWithNoCheck(16, "{DOWN}", 150);
+            for (int i = 0; i < 16; i++)
             {
-                return "Failed to select File output";
+                SendKeys.Send("{DOWN}");
+                Thread.Sleep(60);
             }
 
-            // TAB down to input starting date and delete (BACKSPACE) what's there
-            if (!SendAndWait(2, "{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
+            //// TAB down to input starting date and delete (BACKSPACE) what's there
+            //if (!SendAndWait(2, "{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
 
-                // Type the new date
-                !SendAndWait(startDate))
-            {
-                return "Failed to input the start date";
-            }
+            //    // Type the new date
+            //    !SendAndWait(startDate))
+            //{
+            //    return "Failed to input the start date";
+            //}
 
-            // TAB down to input ending date and delete (BACKSPACE) what's there
-            if (!SendAndWait("{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
+            //// TAB down to input ending date and delete (BACKSPACE) what's there
+            //if (!SendAndWait("{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
 
-                // Type the new date
-                !SendAndWait(endDate))
-            {
-                return "Failed to input the end date";
-            }
+            //    // Type the new date
+            //    !SendAndWait(endDate))
+            //{
+            //    return "Failed to input the end date";
+            //}
 
             // Hit ENTER to request information to print
             Thread.Sleep(500);
-            if (!SendAndWait("{ENTER}"))
-            {
-                return "Failed to request file creation";
-            }
+            SendWithNoCheck(1, "{ENTER}");
 
             // Make the correct process Notepad
             Process[] procs;
@@ -121,32 +122,35 @@ namespace GHAR_Classes
 
                 if (sw.ElapsedMilliseconds > 7000)
                 {
-                    return "Natepad never opened";
+                    return "Notepad never opened";
                 }
             } while (procs.Length == 0);
             correctProcess = procs[0];
             correctHandle = correctProcess.MainWindowHandle;
 
             // Once inside the displayed Notepad File, hit ALT (%) to access the ribons
-            Thread.Sleep(200);
+            Thread.Sleep(1000);
             if (!SendAndWait("%", 500) ||
 
                 // Arrow DOWN to select the "Save As" action and hit ENTER
-                !SendAndWait(4, "{DOWN}", 30) || !SendAndWait("{ENTER}", 900))
+                !SendAndWait(4, "{DOWN}", 90) || !SendAndWait("{ENTER}", 900))
             {
                 return "Failed to select Notepad print options";
             }
 
             // Calculate and type the file name (and create the directory)
-            Directory.CreateDirectory(Constants.RawDataReportsFolder);
-            FilePath = GeneratePath(startDate);
-            if (!SendAndWait(FilePath, 800) ||
+            FindPath(startDate);
+            SendWithNoCheck(1, FilePath, 500);
+            SendWithNoCheck(4, "{TAB}", 200);
+            SendWithNoCheck(1, "{ENTER}",500);
 
-                // Hit ENTER to save the file as the calculated path & name
-                !SendAndWait("{ENTER}"))
-            {
-                return "Failed to input Auto File path and save";
-            }
+            //if (!SendAndWait(FilePath, 800) ||
+
+            //    // Hit ENTER to save the file as the calculated path & name
+            //    !SendAndWait("{ENTER}"))
+            //{
+            //    return "Failed to input Auto File path and save";
+            //}
 
             // Once back in the body of the Notepad window, KILL THE PROCESS!!!
             correctProcess.Kill();
@@ -155,14 +159,29 @@ namespace GHAR_Classes
             // Reset corrects to Megasys
             correctProcess = backPackProcess;
             correctHandle = backPackProcess.MainWindowHandle;
+            SetForegroundWindow(correctHandle);
 
             // Once back in Magasys, TAB over to the Folders Panel and arrow UP to get back to "Favorites"
-            if (!SendAndWait("{TAB}", 150) || !SendAndWait(8, "{UP}", 30))
+            if (!SendAndWait(8, "{UP}", 30))
             {
                 return "Failed to tab back to \"Favorites\" in BackPack";
             }
 
+            // Bring back up GHAR
+            Process gharProc = Process.GetProcessesByName("GHAR_WindowsApp").FirstOrDefault();
+            if (gharProc != null)
+            {
+                correctHandle = gharProc.MainWindowHandle;
+            }
+            SetForegroundWindow(correctHandle);
+
             return null;
+        }
+
+        public void FindPath(string startDate)
+        {
+            Directory.CreateDirectory(Constants.RawDataReportsFolder);
+            FilePath = GeneratePath(startDate);
         }
 
         public void FocusMaegasys()
@@ -214,24 +233,27 @@ namespace GHAR_Classes
             return true;
         }
 
+        void SendWithNoCheck(int repeats, string keys, int delay = 0)
+        {
+            for (int i = 0; i < repeats; i++)
+            {
+                SendKeys.SendWait(keys);
+                Thread.Sleep(delay);
+            }
+        }
+
         bool CheckWindow()
         {
-            if (correctHandle != GetForegroundWindow())
-            {
-                if (correctProcess.HasExited)
-                {
-                    return false;
-                }
-
-                SetForegroundWindow(correctHandle);
-            }
-
-            return true;
+            return correctHandle == GetForegroundWindow();
         }
 
         public string GeneratePath(string date)
         {
-            return Path.Combine(Constants.RawDataReportsFolder, $"AutoReport_[RptOf({date.Replace('/', '.')})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]");
+            string p = System.Reflection.Assembly.GetEntryAssembly().Location;
+            // ReSharper disable once StringLastIndexOfIsCultureSpecific.1
+            int index = p.LastIndexOf(@"\");
+            p = p.Substring(0, index);
+            return Path.Combine(p, Constants.RawDataReportsFolder, $"AutoReport_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt");
         }
     }
 }
