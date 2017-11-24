@@ -108,11 +108,11 @@
             // 
             this.nothingChangedMessage.AutoSize = true;
             this.nothingChangedMessage.BackColor = System.Drawing.Color.Transparent;
-            this.nothingChangedMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nothingChangedMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nothingChangedMessage.ForeColor = System.Drawing.Color.Firebrick;
             this.nothingChangedMessage.Location = new System.Drawing.Point(13, 101);
             this.nothingChangedMessage.Name = "nothingChangedMessage";
-            this.nothingChangedMessage.Size = new System.Drawing.Size(172, 29);
+            this.nothingChangedMessage.Size = new System.Drawing.Size(120, 20);
             this.nothingChangedMessage.TabIndex = 6;
             this.nothingChangedMessage.Text = "changedStatus";
             // 
