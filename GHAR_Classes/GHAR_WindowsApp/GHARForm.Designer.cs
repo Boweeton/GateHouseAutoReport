@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreenForm));
-            this.laodTodaysGuestlistButton = new System.Windows.Forms.Button();
+            this.loadTodaysGuestlistButton = new System.Windows.Forms.Button();
             this.createToursAndTeasButton = new System.Windows.Forms.Button();
             this.createOvernightsButton = new System.Windows.Forms.Button();
             this.lastRunTextBox = new System.Windows.Forms.TextBox();
@@ -40,23 +40,25 @@
             this.lastRunBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // laodTodaysGuestlistButton
+            // loadTodaysGuestlistButton
             // 
-            this.laodTodaysGuestlistButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.laodTodaysGuestlistButton.Location = new System.Drawing.Point(6, 22);
-            this.laodTodaysGuestlistButton.Name = "laodTodaysGuestlistButton";
-            this.laodTodaysGuestlistButton.Size = new System.Drawing.Size(228, 53);
-            this.laodTodaysGuestlistButton.TabIndex = 0;
-            this.laodTodaysGuestlistButton.Text = "Load Today\'s Guests";
-            this.laodTodaysGuestlistButton.UseVisualStyleBackColor = false;
-            this.laodTodaysGuestlistButton.Click += new System.EventHandler(this.OnLaodTodaysGuestlistButtonClick);
+            this.loadTodaysGuestlistButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.loadTodaysGuestlistButton.Location = new System.Drawing.Point(4, 18);
+            this.loadTodaysGuestlistButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loadTodaysGuestlistButton.Name = "loadTodaysGuestlistButton";
+            this.loadTodaysGuestlistButton.Size = new System.Drawing.Size(171, 43);
+            this.loadTodaysGuestlistButton.TabIndex = 0;
+            this.loadTodaysGuestlistButton.Text = "Load Today\'s Guests";
+            this.loadTodaysGuestlistButton.UseVisualStyleBackColor = false;
+            this.loadTodaysGuestlistButton.Click += new System.EventHandler(this.OnLoadTodaysGuestlistButtonClick);
             // 
             // createToursAndTeasButton
             // 
             this.createToursAndTeasButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createToursAndTeasButton.Location = new System.Drawing.Point(6, 81);
+            this.createToursAndTeasButton.Location = new System.Drawing.Point(4, 66);
+            this.createToursAndTeasButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.createToursAndTeasButton.Name = "createToursAndTeasButton";
-            this.createToursAndTeasButton.Size = new System.Drawing.Size(228, 53);
+            this.createToursAndTeasButton.Size = new System.Drawing.Size(171, 43);
             this.createToursAndTeasButton.TabIndex = 1;
             this.createToursAndTeasButton.Text = "Create Tours and Teas Report";
             this.createToursAndTeasButton.UseVisualStyleBackColor = false;
@@ -65,9 +67,10 @@
             // createOvernightsButton
             // 
             this.createOvernightsButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createOvernightsButton.Location = new System.Drawing.Point(6, 140);
+            this.createOvernightsButton.Location = new System.Drawing.Point(4, 114);
+            this.createOvernightsButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.createOvernightsButton.Name = "createOvernightsButton";
-            this.createOvernightsButton.Size = new System.Drawing.Size(228, 53);
+            this.createOvernightsButton.Size = new System.Drawing.Size(171, 43);
             this.createOvernightsButton.TabIndex = 2;
             this.createOvernightsButton.Text = "Create Overnights Report";
             this.createOvernightsButton.UseVisualStyleBackColor = false;
@@ -76,20 +79,23 @@
             // lastRunTextBox
             // 
             this.lastRunTextBox.BackColor = System.Drawing.Color.White;
-            this.lastRunTextBox.Location = new System.Drawing.Point(6, 21);
+            this.lastRunTextBox.Location = new System.Drawing.Point(4, 17);
+            this.lastRunTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lastRunTextBox.Name = "lastRunTextBox";
             this.lastRunTextBox.ReadOnly = true;
-            this.lastRunTextBox.Size = new System.Drawing.Size(180, 22);
+            this.lastRunTextBox.Size = new System.Drawing.Size(136, 20);
             this.lastRunTextBox.TabIndex = 0;
             // 
             // buttonsGroup
             // 
             this.buttonsGroup.Controls.Add(this.createToursAndTeasButton);
-            this.buttonsGroup.Controls.Add(this.laodTodaysGuestlistButton);
+            this.buttonsGroup.Controls.Add(this.loadTodaysGuestlistButton);
             this.buttonsGroup.Controls.Add(this.createOvernightsButton);
-            this.buttonsGroup.Location = new System.Drawing.Point(211, 12);
+            this.buttonsGroup.Location = new System.Drawing.Point(158, 10);
+            this.buttonsGroup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonsGroup.Name = "buttonsGroup";
-            this.buttonsGroup.Size = new System.Drawing.Size(240, 202);
+            this.buttonsGroup.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonsGroup.Size = new System.Drawing.Size(180, 164);
             this.buttonsGroup.TabIndex = 4;
             this.buttonsGroup.TabStop = false;
             this.buttonsGroup.Text = "Commands";
@@ -97,9 +103,11 @@
             // lastRunBox
             // 
             this.lastRunBox.Controls.Add(this.lastRunTextBox);
-            this.lastRunBox.Location = new System.Drawing.Point(12, 12);
+            this.lastRunBox.Location = new System.Drawing.Point(9, 10);
+            this.lastRunBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lastRunBox.Name = "lastRunBox";
-            this.lastRunBox.Size = new System.Drawing.Size(193, 53);
+            this.lastRunBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lastRunBox.Size = new System.Drawing.Size(145, 43);
             this.lastRunBox.TabIndex = 5;
             this.lastRunBox.TabStop = false;
             this.lastRunBox.Text = "Last Run On";
@@ -110,22 +118,25 @@
             this.nothingChangedMessage.BackColor = System.Drawing.Color.Transparent;
             this.nothingChangedMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nothingChangedMessage.ForeColor = System.Drawing.Color.Firebrick;
-            this.nothingChangedMessage.Location = new System.Drawing.Point(13, 101);
+            this.nothingChangedMessage.Location = new System.Drawing.Point(10, 82);
+            this.nothingChangedMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.nothingChangedMessage.Name = "nothingChangedMessage";
-            this.nothingChangedMessage.Size = new System.Drawing.Size(120, 20);
+            this.nothingChangedMessage.Size = new System.Drawing.Size(103, 17);
             this.nothingChangedMessage.TabIndex = 6;
             this.nothingChangedMessage.Text = "changedStatus";
             // 
             // MainScreenForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 228);
+            this.ClientSize = new System.Drawing.Size(346, 185);
             this.Controls.Add(this.nothingChangedMessage);
             this.Controls.Add(this.lastRunBox);
             this.Controls.Add(this.buttonsGroup);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "MainScreenForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -141,7 +152,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button laodTodaysGuestlistButton;
+        private System.Windows.Forms.Button loadTodaysGuestlistButton;
         private System.Windows.Forms.Button createToursAndTeasButton;
         private System.Windows.Forms.Button createOvernightsButton;
         private System.Windows.Forms.TextBox lastRunTextBox;

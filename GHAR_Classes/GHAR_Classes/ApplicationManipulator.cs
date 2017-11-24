@@ -11,99 +11,160 @@ namespace GHAR_Classes
     {
         // Data
         public string FilePath { get; set; }
+        IntPtr correctHandle;
+        Process correctProcess;
 
         [DllImport("User32.dll")]
         static extern int SetForegroundWindow(IntPtr point);
 
+        [DllImport("User32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
         public void TestOnNotepad()
         {
-            Process p = Process.Start("Notepad.exe");
+            Process notePadProcess = Process.Start("Notepad.exe");
 
-            Console.WriteLine(p.ProcessName);
-            Console.WriteLine(p.ProcessName);
-            Console.WriteLine(p.ProcessName);
+            Thread.Sleep(1000);
+
+            if (notePadProcess != null)
+            {
+                IntPtr notepadHandle = notePadProcess.MainWindowHandle;
+                SetForegroundWindow(notepadHandle);
+
+                correctProcess = notePadProcess;
+                correctHandle = notepadHandle;
+
+                SendAndWait("test text 1  ");
+                Thread.Sleep(3000);
+                SendAndWait("test text 2");
+            }
         }
 
-        public void RunMagasysArrivalsReport(string startDate, string endDate)
+        public string RunMagasysArrivalsReport(string startDate, string endDate)
         {
-            // Local Declarations
-            bool shallContinue = true;
-
             // Initialize a Process for BackPack
             Process backPackProcess = Process.GetProcessesByName("BackPack").FirstOrDefault();
+            correctProcess = backPackProcess;
 
             // If the Process is running, bring it to the foreground and begin
-            if (backPackProcess != null)
+            if (backPackProcess == null)
             {
-                IntPtr h = backPackProcess.MainWindowHandle;
-                SetForegroundWindow(h);
+                return "Megasys was not open";
+            }
 
+            // Set the correctHandle to Backpack
+            correctHandle = backPackProcess.MainWindowHandle;
 
-                // [IMPORTANT] (Here, the program expects the highlighted button in Megasys to be "Favorites")
+            // Bring Megasys forward
+            SetForegroundWindow(correctHandle);
 
-                // Arrow DOWN to the Front Office and TAB over the the selection screen
-                Thread.Sleep(100);
-                SendAndWait(4, "{DOWN}", 30);
-                SendAndWait(2, "{TAB}", 150);
+            // [IMPORTANT] (Here, the program expects the highlighted button in Megasys to be "Favorites")
 
-                // Arrow DOWN to Arrivals and hit ENTER
-                SendAndWait(12, "{DOWN}", 30);
-                Thread.Sleep(500);
-                SendAndWait("{ENTER}");
+            // Arrow DOWN to the Front Office and TAB over the the selection screen
+            Thread.Sleep(100);
+            if (!SendAndWait(4, "{DOWN}", 30) ||
+                !SendAndWait(2, "{TAB}", 150) ||
 
-                // Arrow DOWN to select FILE output for the print selection
-                Thread.Sleep(1500);
-                SendAndWait(16, "{DOWN}", 30);
+                // Arrow DOWN to Arrivals
+                !SendAndWait(12, "{DOWN}", 30))
+            {
+                return "Failed to tab and select \"Print Arrivals\"";
+            }
 
-                // TAB down to input starting date and delete (BACKSPACE) what's there
-                SendAndWait(2, "{TAB}", 150);
-                SendAndWait("{BACKSPACE}", 100);
+            // Hit ENTER
+            Thread.Sleep(500);
+            if (!SendAndWait("{ENTER}"))
+            {
+                return "Failed to tab and select \"Print Arrivals\"";
+            }
+
+            // Arrow DOWN to select FILE output for the print selection
+            Thread.Sleep(1500);
+            if (!SendAndWait(16, "{DOWN}", 30))
+            {
+                return "Failed to select File output";
+            }
+
+            // TAB down to input starting date and delete (BACKSPACE) what's there
+            if (!SendAndWait(2, "{TAB}", 150) ||
+                !SendAndWait("{BACKSPACE}", 100) ||
 
                 // Type the new date
-                SendAndWait(startDate);
+                !SendAndWait(startDate))
+            {
+                return "Failed to input the start date";
+            }
 
-                // TAB down to input ending date and delete (BACKSPACE) what's there
-                SendAndWait("{TAB}", 150);
-                SendAndWait("{BACKSPACE}", 100);
+            // TAB down to input ending date and delete (BACKSPACE) what's there
+            if (!SendAndWait("{TAB}", 150) ||
+                !SendAndWait("{BACKSPACE}", 100) ||
 
                 // Type the new date
-                SendAndWait(endDate);
+                !SendAndWait(endDate))
+            {
+                return "Failed to input the end date";
+            }
 
-                // Hit ENTER to request information to print
-                Thread.Sleep(500);
-                SendAndWait("{ENTER}");
+            // Hit ENTER to request information to print
+            Thread.Sleep(500);
+            if (!SendAndWait("{ENTER}"))
+            {
+                return "Failed to request file creation";
+            }
 
-                // Once inside the displayed Notepad File, hit ALT (%) to access the ribons
-                Thread.Sleep(3500);
-                SendAndWait("%");
+            // Make the correct process Notepad
+            Process[] procs;
+            Stopwatch sw = Stopwatch.StartNew();
+            do
+            {
+                Thread.Sleep(300);
+                procs = Process.GetProcessesByName("Notepad");
+
+                if (sw.ElapsedMilliseconds > 7000)
+                {
+                    return "Natepad never opened";
+                }
+            } while (procs.Length == 0);
+            correctProcess = procs[0];
+            correctHandle = correctProcess.MainWindowHandle;
+
+            // Once inside the displayed Notepad File, hit ALT (%) to access the ribons
+            Thread.Sleep(200);
+            if (!SendAndWait("%", 500) ||
 
                 // Arrow DOWN to select the "Save As" action and hit ENTER
-                Thread.Sleep(1000);
-                SendAndWait(4, "{DOWN}", 30);
-                Thread.Sleep(1000);
-                SendAndWait("{ENTER}");
-                Thread.Sleep(900);
+                !SendAndWait(4, "{DOWN}", 30) ||
+                !SendAndWait("{ENTER}", 900))
+            {
+                return "Failed to select Notepad print options";
+            }
 
-                // Calculate and type the file name
-                FilePath = GeneratePath(startDate);
-                SendAndWait(FilePath);
+            // Calculate and type the file name
+            FilePath = GeneratePath(startDate);
+            if (!SendAndWait(FilePath, 800) ||
 
                 // Hit ENTER to save the file as the calculated path & name
-                Thread.Sleep(1200);
-                SendAndWait("{ENTER}");
-
-                // Once back in the body of the Notepad window, hit F4 to close the window
-                SendAndWait("%{F4}");
-
-                // Arrow RIGHT and hit SPACE to confirm close
-                Thread.Sleep(500);
-                SendAndWait("{RIGHT}", 30);
-                SendAndWait(" ");
-
-                // Once back in Magasys, TAB over to the Folders Panel and arrow UP to get back to "Favorites"
-                SendAndWait("{TAB}", 150);
-                SendAndWait(8, "{UP}", 30);
+                !SendAndWait("{ENTER}"))
+            {
+                return "Failed to input Auto File path and save";
             }
+
+            // Once back in the body of the Notepad window, KILL THE PROCESS!!!
+            correctProcess.Kill();
+            Thread.Sleep(500);
+
+            // Reset corrects to Megasys
+            correctProcess = backPackProcess;
+            correctHandle = backPackProcess.MainWindowHandle;
+
+            // Once back in Magasys, TAB over to the Folders Panel and arrow UP to get back to "Favorites"
+            if (!SendAndWait("{TAB}", 150) ||
+                !SendAndWait(8, "{UP}", 30))
+            {
+                return "Failed to tab back to \"Favorites\" in BackPack";
+            }
+
+            return null;
         }
 
         public void FocusMaegasys()
@@ -111,25 +172,62 @@ namespace GHAR_Classes
             // "C:\Program Files (x86)\Megasys\BackPack\BackPack.exe" -hd Mclient.ini MClient.pvx
         }
 
-        static void SendAndWait(string keys, Process p, int delay = 0)
+        bool SendAndWait(string keys, Process p, int delay = 0)
         {
+            if (!CheckWindow())
+            {
+
+                return false;
+            }
+
             SendKeys.SendWait(keys);
             while (!p.Responding) { }
             Thread.Sleep(delay);
+
+            return true;
         }
 
-        static void SendAndWait(string keys, int delay = 0)
+        bool SendAndWait(string keys, int delay = 0)
         {
+            if (!CheckWindow())
+            {
+                return false;
+            }
+
             SendKeys.SendWait(keys);
             Thread.Sleep(delay);
+
+            return true;
         }
 
-        static void SendAndWait(int repeats, string keys, int delay = 0)
+        bool SendAndWait(int repeats, string keys, int delay = 0)
         {
+            if (!CheckWindow())
+            {
+                return false;
+            }
+
             for (int i = 0; i < repeats; i++)
             {
                 SendAndWait(keys, delay);
             }
+
+            return true;
+        }
+
+        bool CheckWindow()
+        {
+            if (correctHandle != GetForegroundWindow())
+            {
+                if (correctProcess.HasExited)
+                {
+                    return false;
+                }
+
+                SetForegroundWindow(correctHandle);
+            }
+
+            return true;
         }
 
         public string GeneratePath(string date)

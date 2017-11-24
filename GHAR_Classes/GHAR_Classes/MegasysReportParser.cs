@@ -38,9 +38,9 @@ namespace GHAR_Classes
 
         #region Public Methods
 
-        public List<EventRoster> CreateEventLists()
+        public void CreateEventLists()
         {
-            List<EventRoster> returnList = new List<EventRoster>();
+            ListOfEvents = new List<EventRoster>();
 
             // Create and add the 11:00 AM Tea
             EventRoster tmp = new EventRoster
@@ -51,7 +51,7 @@ namespace GHAR_Classes
                 MultiEventCode = "Te-11a",
                 Reservations = new List<RosterReservation>()
             };
-            returnList.Add(tmp);
+            ListOfEvents.Add(tmp);
 
             // Create and add the 1:00 PM Tour
             tmp = new EventRoster
@@ -62,7 +62,7 @@ namespace GHAR_Classes
                 MultiEventCode = "Tr-1p",
                 Reservations = new List<RosterReservation>()
             };
-            returnList.Add(tmp);
+            ListOfEvents.Add(tmp);
 
             // Create and add the 2:30 PM Tea
             tmp = new EventRoster
@@ -73,7 +73,7 @@ namespace GHAR_Classes
                 MultiEventCode = "Te-230p",
                 Reservations = new List<RosterReservation>()
             };
-            returnList.Add(tmp);
+            ListOfEvents.Add(tmp);
 
             // Create and add the Overnights "event"
             tmp = new EventRoster
@@ -84,9 +84,7 @@ namespace GHAR_Classes
                 MultiEventCode = "Ov",
                 Reservations = new List<RosterReservation>()
             };
-            returnList.Add(tmp);
-
-            return returnList;
+            ListOfEvents.Add(tmp);
         }
 
         public void ReadInArrivalsReport(string path)

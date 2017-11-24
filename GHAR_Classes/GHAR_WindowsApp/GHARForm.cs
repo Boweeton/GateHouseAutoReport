@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
 using GHAR_Classes;
-using Timer = System.Timers.Timer;
 
 namespace GHAR_WindowsApp
 {
@@ -23,6 +16,7 @@ namespace GHAR_WindowsApp
         string masterPath;
         List<EventRoster> oldList;
         bool hasRunOnce;
+        const string ReportsFolder = "CreatedReports";
 
         public MainScreenForm()
         {
@@ -40,14 +34,21 @@ namespace GHAR_WindowsApp
 
         }
 
-        void OnLaodTodaysGuestlistButtonClick(object sender, EventArgs e)
+        void OnLoadTodaysGuestlistButtonClick(object sender, EventArgs e)
         {
+            string message = am.RunMagasysArrivalsReport($"{DateTime.Today:d}", $"{DateTime.Today:d}");
+            if (message != null)
+            {
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             //StreamWriter sw = new StreamWriter("test.txt");
-            masterPath = am.GeneratePath($"{DateTime.Today:M/d/yy}");
+            masterPath = am.FilePath;
 
             // Read in the report
-            rp.ListOfEvents = rp.CreateEventLists();
-            rp.ReadInArrivalsReport(@"D:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt");
+            rp.CreateEventLists();
+            rp.ReadInArrivalsReport(masterPath);
             rp.CalculateValues();
 
             // First run initialization
@@ -57,16 +58,10 @@ namespace GHAR_WindowsApp
             }
 
             // Check to see if anyhting has changed
-            if (ListsAreDifferant(oldList, rp.ListOfEvents) && hasRunOnce)
+            if (ListsAreDifferent(oldList, rp.ListOfEvents) && hasRunOnce)
             {
-                // Create a timer
-                Timer timer = new System.Timers.Timer(2000);
-
-                // Hook up the Elapsed event for the timer.
-                timer.Elapsed += OnTimedEvent;
-                timer.Enabled = true;
-
-                nothingChangedMessage.Text = "*Nothing was differnt";
+                RunTimer();
+                nothingChangedMessage.Text = "*Nothing was different";
             }
 
             // Store the read in list to the oldList
@@ -79,23 +74,36 @@ namespace GHAR_WindowsApp
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
         {
+            string text = rp.ToStringForTeasAndTours();
+            Directory.CreateDirectory(ReportsFolder);
+            string path = Path.Combine(ReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:hh.mm.ss}");
+
+            File.WriteAllText(path, text);
+
+            Process.Start(path);
 
             UpdateLastRunText();
         }
 
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
         {
+            string text = rp.ToStringForOvernights();
+            Directory.CreateDirectory(ReportsFolder);
+            string path = Path.Combine(ReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:hh.mm.ss}");
 
+            File.WriteAllText(path, text);
+
+            Process.Start(path);
 
             UpdateLastRunText();
         }
 
         void UpdateLastRunText()
         {
-            lastRunTextBox.Text = $"{DateTime.Today:M/d/yy} at {DateTime.Now:hh:mm tt}";
+            lastRunTextBox.Text = $"{DateTime.Now:hh:mm tt}";
         }
 
-        bool ListsAreDifferant(List<EventRoster> list1, List<EventRoster> list2)
+        static bool ListsAreDifferent(List<EventRoster> list1, List<EventRoster> list2)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             for (int i = 0; i < list1.Count; i++)
@@ -108,8 +116,15 @@ namespace GHAR_WindowsApp
             return true;
         }
 
-        void OnTimedEvent(object source, ElapsedEventArgs e)
+        async void RunTimer()
         {
+            await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                while (sw.ElapsedMilliseconds < 4000)
+                {
+                }
+            });
             nothingChangedMessage.Text = string.Empty;
         }
     }
