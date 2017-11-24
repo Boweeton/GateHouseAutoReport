@@ -16,7 +16,6 @@ namespace GHAR_WindowsApp
         readonly ApplicationManipulator am;
         string masterPath;
         List<EventRoster> oldList;
-        const string ReportsFolder = "CreatedReports";
 
         public MainScreenForm()
         {
@@ -37,15 +36,21 @@ namespace GHAR_WindowsApp
 
         void OnLoadTodaysGuestlistButtonClick(object sender, EventArgs e)
         {
+#if DEBUG
+            string message = null;
+#else
             string message = am.RunMagasysArrivalsReport($"{DateTime.Today:d}", $"{DateTime.Today:d}");
+#endif
             if (message != null)
             {
                 MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            //StreamWriter sw = new StreamWriter("test.txt");
+#if DEBUG
+            masterPath = @"I:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt";
+#else
             masterPath = am.FilePath;
+#endif
 
             // Read in the report
             rp.CreateEventLists();
@@ -75,8 +80,8 @@ namespace GHAR_WindowsApp
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
         {
             string text = rp.ToStringForTeasAndTours();
-            Directory.CreateDirectory(ReportsFolder);
-            string path = Path.Combine(ReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
+            Directory.CreateDirectory(Constants.CreatedReportsFolder);
+            string path = Path.Combine(Constants.CreatedReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
             File.WriteAllText(path, text);
 
@@ -88,8 +93,8 @@ namespace GHAR_WindowsApp
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
         {
             string text = rp.ToStringForOvernights();
-            Directory.CreateDirectory(ReportsFolder);
-            string path = Path.Combine(ReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
+            Directory.CreateDirectory(Constants.CreatedReportsFolder);
+            string path = Path.Combine(Constants.CreatedReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
             File.WriteAllText(path, text);
 

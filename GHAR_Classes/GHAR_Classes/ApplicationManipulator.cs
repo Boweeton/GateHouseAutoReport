@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ namespace GHAR_Classes
     {
         // Data
         public string FilePath { get; set; }
+
         IntPtr correctHandle;
         Process correctProcess;
 
@@ -62,8 +64,7 @@ namespace GHAR_Classes
 
             // Arrow DOWN to the Front Office and TAB over the the selection screen
             Thread.Sleep(100);
-            if (!SendAndWait(4, "{DOWN}", 30) ||
-                !SendAndWait(2, "{TAB}", 150) ||
+            if (!SendAndWait(4, "{DOWN}", 30) || !SendAndWait(2, "{TAB}", 150) ||
 
                 // Arrow DOWN to Arrivals
                 !SendAndWait(12, "{DOWN}", 30))
@@ -86,8 +87,7 @@ namespace GHAR_Classes
             }
 
             // TAB down to input starting date and delete (BACKSPACE) what's there
-            if (!SendAndWait(2, "{TAB}", 150) ||
-                !SendAndWait("{BACKSPACE}", 100) ||
+            if (!SendAndWait(2, "{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
 
                 // Type the new date
                 !SendAndWait(startDate))
@@ -96,8 +96,7 @@ namespace GHAR_Classes
             }
 
             // TAB down to input ending date and delete (BACKSPACE) what's there
-            if (!SendAndWait("{TAB}", 150) ||
-                !SendAndWait("{BACKSPACE}", 100) ||
+            if (!SendAndWait("{TAB}", 150) || !SendAndWait("{BACKSPACE}", 100) ||
 
                 // Type the new date
                 !SendAndWait(endDate))
@@ -133,13 +132,13 @@ namespace GHAR_Classes
             if (!SendAndWait("%", 500) ||
 
                 // Arrow DOWN to select the "Save As" action and hit ENTER
-                !SendAndWait(4, "{DOWN}", 30) ||
-                !SendAndWait("{ENTER}", 900))
+                !SendAndWait(4, "{DOWN}", 30) || !SendAndWait("{ENTER}", 900))
             {
                 return "Failed to select Notepad print options";
             }
 
-            // Calculate and type the file name
+            // Calculate and type the file name (and create the directory)
+            Directory.CreateDirectory(Constants.RawDataReportsFolder);
             FilePath = GeneratePath(startDate);
             if (!SendAndWait(FilePath, 800) ||
 
@@ -158,8 +157,7 @@ namespace GHAR_Classes
             correctHandle = backPackProcess.MainWindowHandle;
 
             // Once back in Magasys, TAB over to the Folders Panel and arrow UP to get back to "Favorites"
-            if (!SendAndWait("{TAB}", 150) ||
-                !SendAndWait(8, "{UP}", 30))
+            if (!SendAndWait("{TAB}", 150) || !SendAndWait(8, "{UP}", 30))
             {
                 return "Failed to tab back to \"Favorites\" in BackPack";
             }
@@ -181,7 +179,8 @@ namespace GHAR_Classes
             }
 
             SendKeys.SendWait(keys);
-            while (!p.Responding) { }
+            while (!p.Responding)
+            { }
             Thread.Sleep(delay);
 
             return true;
@@ -232,8 +231,7 @@ namespace GHAR_Classes
 
         public string GeneratePath(string date)
         {
-            string[] splitList = date.Split('/');
-            return $"AutoReport_[RptOf({splitList[0]}.{splitList[1]}.{splitList[2]})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]";
+            return Path.Combine(Constants.RawDataReportsFolder, $"AutoReport_[RptOf({date.Replace('/', '.')})]_[CrtOn({DateTime.Today.Date:M-d-yy})--({DateTime.Now:h.mm.sstt})]");
         }
     }
 }
