@@ -111,6 +111,7 @@ namespace GHAR_Classes
             // Hit ENTER to request information to print
             Thread.Sleep(500);
             SendWithNoCheck(1, "{ENTER}");
+            Thread.Sleep(1700);
 
             // Make the correct process Notepad
             Process[] procs;
@@ -129,7 +130,6 @@ namespace GHAR_Classes
             correctHandle = correctProcess.MainWindowHandle;
 
             // Once inside the displayed Notepad File, hit ALT (%) to access the ribons
-            Thread.Sleep(1000);
             if (!SendAndWait("%", 500) ||
 
                 // Arrow DOWN to select the "Save As" action and hit ENTER
@@ -162,7 +162,7 @@ namespace GHAR_Classes
             SetForegroundWindow(correctHandle);
 
             // Once back in Magasys, TAB over to the Folders Panel and arrow UP to get back to "Favorites"
-            if (!SendAndWait(8, "{UP}", 30))
+            if (!SendAndWait("{TAB}", 200) || !SendAndWait(8, "{UP}", 30))
             {
                 return "Failed to tab back to \"Favorites\" in BackPack";
             }
