@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,11 +12,10 @@ namespace GHAR_WindowsApp
     public partial class MainScreenForm : Form
     {
         // Data
-        MegasysReportParser rp;
-        ApplicationManipulator am;
+        readonly MegasysReportParser rp;
+        readonly ApplicationManipulator am;
         string masterPath;
         List<EventRoster> oldList;
-        bool hasRunOnce;
         const string ReportsFolder = "CreatedReports";
 
         public MainScreenForm()
@@ -26,12 +26,13 @@ namespace GHAR_WindowsApp
             createOvernightsButton.Enabled = false;
             createToursAndTeasButton.Enabled = false;
             nothingChangedMessage.Text = string.Empty;
-            hasRunOnce = false;
         }
 
         void OnProgramLoad(object sender, EventArgs e)
         {
-
+            nothingChangedMessage.Text = string.Empty;
+            nothingChangedMessage.BackColor = BackColor;
+            nothingChangedMessage.ForeColor = Color.White;
         }
 
         void OnLoadTodaysGuestlistButtonClick(object sender, EventArgs e)
@@ -51,17 +52,17 @@ namespace GHAR_WindowsApp
             rp.ReadInArrivalsReport(masterPath);
             rp.CalculateValues();
 
-            // First run initialization
-            if (!hasRunOnce)
-            {
-                oldList = rp.ListOfEvents;
-            }
-
             // Check to see if anyhting has changed
-            if (ListsAreDifferent(oldList, rp.ListOfEvents) && hasRunOnce)
+            RunTimer();
+            if (ListsAreDifferent(oldList, rp.ListOfEvents))
             {
-                RunTimer();
-                nothingChangedMessage.Text = "*Nothing was different";
+                nothingChangedMessage.BackColor = Color.ForestGreen;
+                nothingChangedMessage.Text = "Sucessfully loaded new report";
+            }
+            else
+            {
+                nothingChangedMessage.BackColor = Color.DodgerBlue;
+                nothingChangedMessage.Text = "Nothing was different";
             }
 
             // Store the read in list to the oldList
@@ -69,14 +70,13 @@ namespace GHAR_WindowsApp
 
             createOvernightsButton.Enabled = true;
             createToursAndTeasButton.Enabled = true;
-            hasRunOnce = true;
         }
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
         {
             string text = rp.ToStringForTeasAndTours();
             Directory.CreateDirectory(ReportsFolder);
-            string path = Path.Combine(ReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:hh.mm.ss}");
+            string path = Path.Combine(ReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
             File.WriteAllText(path, text);
 
@@ -89,7 +89,7 @@ namespace GHAR_WindowsApp
         {
             string text = rp.ToStringForOvernights();
             Directory.CreateDirectory(ReportsFolder);
-            string path = Path.Combine(ReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:hh.mm.ss}");
+            string path = Path.Combine(ReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
             File.WriteAllText(path, text);
 
@@ -105,15 +105,20 @@ namespace GHAR_WindowsApp
 
         static bool ListsAreDifferent(List<EventRoster> list1, List<EventRoster> list2)
         {
+            if (list1 == null || list2 == null)
+            {
+                return true;
+            }
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             for (int i = 0; i < list1.Count; i++)
             {
                 if (list1[i].Reservations.Count != list2[i].Reservations.Count)
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         async void RunTimer()
@@ -126,6 +131,7 @@ namespace GHAR_WindowsApp
                 }
             });
             nothingChangedMessage.Text = string.Empty;
+            nothingChangedMessage.BackColor = BackColor;
         }
     }
 }
