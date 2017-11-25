@@ -13,7 +13,7 @@ namespace GHAR_ConsoleApp
             const int MaxTourCount = 25;
 
             ApplicationManipulator am = new ApplicationManipulator();
-            MegasysReportParser reportParser = new MegasysReportParser();
+            ReportManager reportParser = new ReportManager();
 
             //am.TestOnNotepad();
             //Console.WriteLine(am.RunMagasysArrivalsReport($"{DateTime.Today:d}", $"{DateTime.Today:d}"));

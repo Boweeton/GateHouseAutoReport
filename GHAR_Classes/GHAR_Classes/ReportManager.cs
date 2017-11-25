@@ -6,11 +6,12 @@ using System.Text;
 
 namespace GHAR_Classes
 {
-    public class MegasysReportParser
+    public class ReportManager
     {
         #region Data
 
         const int MaxTourSize = 25;
+        List<EventRoster> oldList;
 
         #endregion
 
@@ -23,7 +24,6 @@ namespace GHAR_Classes
         #region Properties
 
         // Input Data
-        public List<string> FileLines { get; set; }
 
         // Reporting Data
         public List<EventRoster> ListOfEvents { get; set; }
@@ -31,6 +31,10 @@ namespace GHAR_Classes
         public int OvernightPassCount { get; set; }
         public List<string> OvernightPassDates { get; set; }
         public List<int> OvernightPassCounts { get; set; }
+
+        // Data
+        public List<string> FileLines { get; set; }
+        public bool ChangedAtLastRun { get; set; }
 
         #endregion
 
@@ -205,6 +209,19 @@ namespace GHAR_Classes
                     }
                 }
             }
+
+            // Check to see if the new read in list is differant
+            if (oldList != null)
+            {
+                ChangedAtLastRun = ListsAreDifferent(oldList, ListOfEvents);
+            }
+            else
+            {
+                ChangedAtLastRun = true;
+            }
+
+            // Store the read in list to the oldList
+            oldList = ListOfEvents;
         }
 
         public void CalculateValues()
@@ -443,10 +460,28 @@ namespace GHAR_Classes
 
         #region Private Methods
 
-            bool IsCorrectDateFormat(string input)
+        static bool IsCorrectDateFormat(string input)
             {
                 return DateTime.TryParse(input, out DateTime dateValue);
             }
+
+        static bool ListsAreDifferent(List<EventRoster> list1, List<EventRoster> list2)
+        {
+            if (list1 == null || list2 == null)
+            {
+                return true;
+            }
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (int i = 0; i < list1.Count; i++)
+            {
+                if (list1[i].Reservations.Count != list2[i].Reservations.Count)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         #endregion
 

@@ -45,7 +45,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="EventRoster.cs" />
     <Compile Include="GuestType.cs" />
-    <Compile Include="MegasysReportParser.cs" />
+    <Compile Include="ReportManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RosterReservation.cs" />
     <Compile Include="Util.cs" />

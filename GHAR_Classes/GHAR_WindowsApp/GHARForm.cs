@@ -12,15 +12,14 @@ namespace GHAR_WindowsApp
     public partial class MainScreenForm : Form
     {
         // Data
-        readonly MegasysReportParser rp;
+        readonly ReportManager rp;
         ApplicationManipulator am;
         string masterPath;
-        List<EventRoster> oldList;
 
         public MainScreenForm()
         {
             InitializeComponent();
-            rp = new MegasysReportParser();
+            rp = new ReportManager();
             am = new ApplicationManipulator();
             createOvernightsButton.Enabled = false;
             createToursAndTeasButton.Enabled = false;
@@ -47,7 +46,7 @@ namespace GHAR_WindowsApp
                 return;
             }
 #if DEBUG
-            masterPath = @"I:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt";
+            masterPath = @"D:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt";
 #else
             masterPath = am.FilePath;
 #endif
@@ -56,25 +55,12 @@ namespace GHAR_WindowsApp
             rp.CreateEventLists();
             rp.ReadInArrivalsReport(masterPath);
             rp.CalculateValues();
-
-            // Check to see if anyhting has changed
-            RunTimer();
-            if (ListsAreDifferent(oldList, rp.ListOfEvents))
-            {
-                nothingChangedMessage.BackColor = Color.ForestGreen;
-                nothingChangedMessage.Text = "Sucessfully loaded new report";
-            }
-            else
-            {
-                nothingChangedMessage.BackColor = Color.DodgerBlue;
-                nothingChangedMessage.Text = "Nothing was different";
-            }
-
-            // Store the read in list to the oldList
-            oldList = rp.ListOfEvents;
+            UpdateResultsBanner();
 
             createOvernightsButton.Enabled = true;
             createToursAndTeasButton.Enabled = true;
+
+            UpdateLastRunText();
         }
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
@@ -86,8 +72,6 @@ namespace GHAR_WindowsApp
             File.WriteAllText(path, text);
 
             Process.Start(path);
-
-            UpdateLastRunText();
         }
 
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
@@ -99,8 +83,6 @@ namespace GHAR_WindowsApp
             File.WriteAllText(path, text);
 
             Process.Start(path);
-
-            UpdateLastRunText();
         }
 
         void UpdateLastRunText()
@@ -141,10 +123,35 @@ namespace GHAR_WindowsApp
 
         void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
         {
-            ManualPathForm m = new ManualPathForm(am, rp);
-            m.Show();
+            using (ManualPathForm m = new ManualPathForm(am, rp))
+            {
+                //m.Show();
+                if (m.ShowDialog() == DialogResult.OK)
+                {
+                }
+            }
+            UpdateResultsBanner();
+
             createOvernightsButton.Enabled = true;
             createToursAndTeasButton.Enabled = true;
+
+            UpdateLastRunText();
+        }
+
+        public void UpdateResultsBanner()
+        {
+            // Check to see if anyhting has changed
+            RunTimer();
+            if (rp.ChangedAtLastRun)
+            {
+                nothingChangedMessage.BackColor = Color.ForestGreen;
+                nothingChangedMessage.Text = "Sucessfully loaded new report";
+            }
+            else
+            {
+                nothingChangedMessage.BackColor = Color.DodgerBlue;
+                nothingChangedMessage.Text = "Nothing was different";
+            }
         }
     }
 }
