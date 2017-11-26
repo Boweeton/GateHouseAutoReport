@@ -249,11 +249,7 @@ namespace GHAR_Classes
 
         public string GeneratePath(string date)
         {
-            string p = System.Reflection.Assembly.GetEntryAssembly().Location;
-            // ReSharper disable once StringLastIndexOfIsCultureSpecific.1
-            int index = p.LastIndexOf(@"\");
-            p = p.Substring(0, index);
-            return Path.Combine(p, Constants.RawDataReportsFolder, $"AutoReport_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt");
+            return Path.GetFullPath(Path.Combine(Constants.RawDataReportsFolder, $"AutoReport_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt"));
         }
     }
 }

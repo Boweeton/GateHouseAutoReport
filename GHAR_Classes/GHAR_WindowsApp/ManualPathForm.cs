@@ -35,7 +35,7 @@ namespace GHAR_WindowsApp
             {
                 // Read in the report
                 rp.CreateEventLists();
-                rp.ReadInArrivalsReport(displayPath);
+                //rp.ReadInArrivalsReport(displayPath);
                 rp.CalculateValues();
 
                 Close();

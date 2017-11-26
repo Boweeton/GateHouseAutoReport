@@ -4,6 +4,9 @@
     {
         Overnight,
         Tea,
-        Tour
+        Tour,
+        Madrigal,
+        Concert,
+        Dinner
     }
 }

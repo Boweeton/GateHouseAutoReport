@@ -12,14 +12,14 @@ namespace GHAR_WindowsApp
     public partial class MainScreenForm : Form
     {
         // Data
-        readonly ReportManager rp;
+        readonly ReportManager rm;
         ApplicationManipulator am;
         string masterPath;
 
         public MainScreenForm()
         {
             InitializeComponent();
-            rp = new ReportManager();
+            rm = new ReportManager();
             am = new ApplicationManipulator();
             createOvernightsButton.Enabled = false;
             createToursAndTeasButton.Enabled = false;
@@ -52,9 +52,9 @@ namespace GHAR_WindowsApp
 #endif
 
             // Read in the report
-            rp.CreateEventLists();
-            rp.ReadInArrivalsReport(masterPath);
-            rp.CalculateValues();
+            rm.CreateEventLists();
+            //rm.ReadInArrivalsReport(masterPath);
+            rm.CalculateValues();
             UpdateResultsBanner();
 
             createOvernightsButton.Enabled = true;
@@ -65,7 +65,7 @@ namespace GHAR_WindowsApp
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
         {
-            string text = rp.ToStringForTeasAndTours();
+            string text = rm.ToStringForTeasAndTours();
             Directory.CreateDirectory(Constants.CreatedReportsFolder);
             string path = Path.Combine(Constants.CreatedReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
@@ -76,7 +76,7 @@ namespace GHAR_WindowsApp
 
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
         {
-            string text = rp.ToStringForOvernights();
+            string text = rm.ToStringForOvernights();
             Directory.CreateDirectory(Constants.CreatedReportsFolder);
             string path = Path.Combine(Constants.CreatedReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
@@ -123,7 +123,7 @@ namespace GHAR_WindowsApp
 
         void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
         {
-            using (ManualPathForm m = new ManualPathForm(am, rp))
+            using (ManualPathForm m = new ManualPathForm(am, rm))
             {
                 //m.Show();
                 if (m.ShowDialog() == DialogResult.OK)
@@ -142,7 +142,7 @@ namespace GHAR_WindowsApp
         {
             // Check to see if anyhting has changed
             RunTimer();
-            if (rp.ChangedAtLastRun)
+            if (rm.ChangedAtLastRun)
             {
                 nothingChangedMessage.BackColor = Color.ForestGreen;
                 nothingChangedMessage.Text = "Sucessfully loaded new report";
@@ -152,6 +152,11 @@ namespace GHAR_WindowsApp
                 nothingChangedMessage.BackColor = Color.DodgerBlue;
                 nothingChangedMessage.Text = "Nothing was different";
             }
+        }
+
+        void testButton_Click(object sender, EventArgs e)
+        {
+            rm.ReadInBothReports(@"I:\ToursReport7.txt", @"I:\OtherArrivalsReport2.txt");
         }
     }
 }

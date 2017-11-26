@@ -91,13 +91,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GHAR_Classes\GHAR_Classes.csproj">
       <Project>{73464470-165c-40c3-8f52-727010ee70dc}</Project>
       <Name>GHAR_Classes</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
