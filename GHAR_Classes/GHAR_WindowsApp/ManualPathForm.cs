@@ -34,7 +34,7 @@ namespace GHAR_WindowsApp
             if (File.Exists(displayPath))
             {
                 // Read in the report
-                rp.CreateEventLists();
+                //rp.CreateEventLists();
                 //rp.ReadInArrivalsReport(displayPath);
                 rp.CalculateValues();
 

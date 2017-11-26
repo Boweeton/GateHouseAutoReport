@@ -29,18 +29,15 @@ namespace GHAR_Classes
         #region Properties
 
         // Reporting Data
-        public List<EventRoster> ListOfEvents { get; set; } // old
         public int DayPasseCount { get; set; }
         public int OvernightPassCount { get; set; }
-        public List<string> OvernightPassDates { get; set; } // old
-        public List<int> OvernightPassCounts { get; set; } // old
 
         // Data
         public string[] FileLines { get; set; }
         public bool ChangedAtLastRun { get; set; }
         public string ToursReportPath { get; set; }
         public string OtherArrivalsReportPath { get; set; }
-        public List<RosterReservation> AllReservations { get; } = new List<RosterReservation>();
+        public List<RosterReservation> AllReservations { get; set; } = new List<RosterReservation>();
         public List<OvPassRecord> OvPassRecords { get; set; }
 
         #endregion
@@ -196,55 +193,6 @@ namespace GHAR_Classes
             return true;
         }
 
-        public void CreateEventLists()
-        {
-            ListOfEvents = new List<EventRoster>();
-
-            // Create and add the 11:00 AM Tea
-            EventRoster tmp = new EventRoster
-            {
-                Title = "Tea - 11:00 AM",
-                Type = GuestType.Tea,
-                Time = "11:00 AM",
-                MultiEventCode = "Te-11a",
-                Reservations = new List<RosterReservation>()
-            };
-            ListOfEvents.Add(tmp);
-
-            // Create and add the 1:00 PM Tour
-            tmp = new EventRoster
-            {
-                Title = "Tour - 1:00 PM",
-                Type = GuestType.Tour,
-                Time = "1:00 PM",
-                MultiEventCode = "Tr-1p",
-                Reservations = new List<RosterReservation>()
-            };
-            ListOfEvents.Add(tmp);
-
-            // Create and add the 2:30 PM Tea
-            tmp = new EventRoster
-            {
-                Title = "Tea - 2:30 PM",
-                Type = GuestType.Tea,
-                Time = "2:30 PM",
-                MultiEventCode = "Te-230p",
-                Reservations = new List<RosterReservation>()
-            };
-            ListOfEvents.Add(tmp);
-
-            // Create and add the Overnights "event"
-            tmp = new EventRoster
-            {
-                Title = "Overnights",
-                Type = GuestType.Overnight,
-                Time = "0:00 AM",
-                MultiEventCode = "Ov",
-                Reservations = new List<RosterReservation>()
-            };
-            ListOfEvents.Add(tmp);
-        }
-
         //public void ReadInArrivalsReport(string path)
         //{
         //    FileLines = new List<string>();
@@ -385,12 +333,13 @@ namespace GHAR_Classes
             {
                 foreach (RosterReservation resInner in AllReservations)
                 {
-                    resInner.EventCodes = new List<string>();
                     if (resCurrent != resInner)
                     {
                         if (resCurrent.Name == resInner.Name)
                         {
-                            resInner.EventCodes.Add(CreateEventCode(resCurrent));
+                            string code = CreateEventCode(resCurrent);
+                            resInner.EventCodes.Add(code);
+                            resInner.TotalEventsCode += $"({code})";
                         }
                     }
                 }
@@ -408,97 +357,13 @@ namespace GHAR_Classes
 
             // Calculate Overnight Passes
             OvPassRecords = new List<OvPassRecord>();
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (RosterReservation res in AllReservations)
             {
                 if (res.Type == GuestType.Overnight)
                 {
-                    
-                }
-            }
-
-
-            // ------------------------------------------------------------------------------------------------------
-
-            // Sort the data
-            foreach (EventRoster roster in ListOfEvents)
-            {
-                roster.Reservations  = roster.Reservations.OrderBy(rosterReservation => rosterReservation.Name).ToList();
-            }
-
-            // Calculate the Overnight Passes
-            EventRoster overnightRoster = null;
-
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (EventRoster roster in ListOfEvents)
-            {
-                if (roster.Type == GuestType.Overnight)
-                {
-                    overnightRoster = roster;
-                }
-            }
-
-            OvernightPassDates = new List<string>();
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (RosterReservation res in overnightRoster.Reservations)
-            {
-                if (!OvernightPassDates.Contains(res.DepartDate))
-                {
-                    OvernightPassDates.Add(res.DepartDate);
-                }
-            }
-
-            OvernightPassDates.Sort();
-
-            OvernightPassCounts = new List<int>();
-            foreach (string date in OvernightPassDates)
-            {
-                OvernightPassCounts.Add(0);
-            }
-
-            OvernightPassCount = 0;
-            foreach (RosterReservation res in overnightRoster.Reservations)
-            {
-                OvernightPassCounts[OvernightPassDates.IndexOf(res.DepartDate)] += res.EntryCount;
-                OvernightPassCount += res.EntryCount;
-            }
-
-            // Calculate Day Passes
-            DayPasseCount = 0;
-
-            foreach (EventRoster roster in ListOfEvents)
-            {
-                if (roster.Type != GuestType.Overnight)
-                {
-                    foreach (RosterReservation res in roster.Reservations)
-                    {
-                        DayPasseCount += res.EntryCount;
-                    }
-                }
-            }
-
-            // Calculate reservation's "MultiEvent" codes
-            foreach (EventRoster mainRoster in ListOfEvents)
-            {
-                foreach (RosterReservation mainRes in mainRoster.Reservations)
-                {
-                    mainRes.EventCodes = new List<string>();
-
-                    foreach (EventRoster roster in ListOfEvents)
-                    {
-                        if (roster != mainRoster)
-                        {
-                            foreach (RosterReservation res in roster.Reservations)
-                            {
-                                if (mainRes.Name == res.Name)
-                                {
-                                    if (!mainRes.EventCodes.Contains(roster.MultiEventCode))
-                                    {
-                                        mainRes.EventCodes.Add(roster.MultiEventCode);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    OvPassRecord opr = new OvPassRecord { Count = 1, Date = res.DepartDate };
+                    AddOrIncrement(opr, OvPassRecords);
                 }
             }
         }
@@ -508,146 +373,83 @@ namespace GHAR_Classes
             // Local declarations
             StringBuilder sb = new StringBuilder();
             const int OffsetAfterName = 18;
-            const int OffsetAfterMEventCode = 16;
             const int OffsetAfterTime = 10;
             const int OffsetAfterCount = 10;
             const int OffsetAfterType = 0;
 
-            // Create header
-            string title = $"Summed Up Report of Teas & Tours for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:hh:mm tt})";
-            sb.AppendLine(title);
-            sb.AppendLine();
-
-            string header = $"{"Name",-OffsetAfterName}{"Count",-OffsetAfterCount}{"O-Events",-OffsetAfterMEventCode}{"Time",-OffsetAfterTime}{"Type",-OffsetAfterType}";
-            sb.AppendLine(header);
-            sb.AppendLine();
-
-            foreach (RosterReservation res in ListOfEvents[0].Reservations)
+            int offsetAfterMEventCode = 0;
+            foreach (RosterReservation res in AllReservations)
             {
-                // Assmble "Multi Event Code"
-                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
-                string followMec = mec != string.Empty ? "\"" : string.Empty;
-
-                for (int i = 0; i < res.EntryCount; i++)
+                if (res.TotalEventsCode.Length > offsetAfterMEventCode)
                 {
-                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                    if (i == 0)
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
+                    offsetAfterMEventCode = res.TotalEventsCode.Length;
                 }
             }
-            sb.AppendLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            offsetAfterMEventCode += 2;
 
-            int tourTotal = 0;
-            foreach (RosterReservation res in ListOfEvents[1].Reservations)
-            {
-                // Increment the tourTotal
-                tourTotal += res.GuestCount;
-
-                // Assmble "Multi Event Code"
-                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
-                string followMec = mec != string.Empty ? "\"" : string.Empty;
-
-                for (int i = 0; i < res.EntryCount; i++)
-                {
-                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                    if (i == 0)
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
-                }
-            }
-            sb.AppendLine();
-
-            sb.AppendLine($"Total: {tourTotal}\tRemaining: {MaxTourSize - tourTotal}");
-            sb.AppendLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-
-            foreach (RosterReservation res in ListOfEvents[2].Reservations)
-            {
-                // Assmble "Multi Event Code"
-                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
-                string followMec = mec != string.Empty ? "\"" : string.Empty;
-
-                for (int i = 0; i < res.EntryCount; i++)
-                {
-                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                    if (i == 0)
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{res.GuestCount,-OffsetAfterCount}{mec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{"\"",-OffsetAfterCount}{followMec,-OffsetAfterMEventCode}{res.DisplayTime,-OffsetAfterTime}{res.Type,-OffsetAfterType}");
-                    }
-                }
-            }
-            sb.AppendLine();
-
-            // Display pass count
-            int extraSheets = DayPasseCount % 3 == 0 ? 0 : 1;
-            sb.AppendLine($"Day Passes: {DayPasseCount}\t({DayPasseCount} = {(DayPasseCount/3) + extraSheets} Sheets)");
+            // Sort the reservations list
+            AllReservations = AllReservations.OrderBy(res => res.TimeValue).ThenBy(res => res.Type).ThenBy(res => res.Name).ToList();
 
             return sb.ToString();
+
+            // Local Functions
+            void BuffInsert(string s, int offset)
+            {
+                int spacesAfter = offset - s.Length;
+                sb.Append(s);
+                sb.Append(' ', spacesAfter);
+            }
         }
 
-        public string ToStringForOvernights()
-        {
-            // Local declarations
-            StringBuilder sb = new StringBuilder();
-            const int OffsetAfterName = 18;
-            const int OffsetAfterMEventCode = 16;
-            const int OffsetAfterDate = 14;
-            const int OffsetAfterCount = 10;
-            const int OffsetAfterType = 0;
+        //public string ToStringForOvernights()
+        //{
+        //    // Local declarations
+        //    StringBuilder sb = new StringBuilder();
+        //    const int OffsetAfterName = 18;
+        //    const int OffsetAfterMEventCode = 16;
+        //    const int OffsetAfterDate = 14;
+        //    const int OffsetAfterCount = 10;
+        //    const int OffsetAfterType = 0;
 
-            // Create header
-            string title = $"Summed Up Report of Overnights for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:hh:mm tt})";
-            sb.AppendLine(title);
-            sb.AppendLine();
+        //    // Create header
+        //    string title = $"Summed Up Report of Overnights for [{DateTime.Today.Date:M/d/yy}] (Run at: {DateTime.Now:hh:mm tt})";
+        //    sb.AppendLine(title);
+        //    sb.AppendLine();
 
-            string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Depart-Date",-OffsetAfterDate}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
-            sb.AppendLine(header);
-            sb.AppendLine();
+        //    string header = $"{"Name",-OffsetAfterName}{"O-Events",-OffsetAfterMEventCode}{"Depart-Date",-OffsetAfterDate}{"Count",-OffsetAfterCount}{"Type",-OffsetAfterType}";
+        //    sb.AppendLine(header);
+        //    sb.AppendLine();
 
-            foreach (RosterReservation res in ListOfEvents[3].Reservations)
-            {
-                // Assmble "Multi Event Code"
-                string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
-                string followMec = mec != string.Empty ? "\"" : string.Empty;
+        //    foreach (RosterReservation res in ListOfEvents[3].Reservations)
+        //    {
+        //        // Assmble "Multi Event Code"
+        //        string mec = res.EventCodes.Count > 0 ? res.EventCodes.Aggregate(string.Empty, (current, code) => $"{current}({code})") : string.Empty;
+        //        string followMec = mec != string.Empty ? "\"" : string.Empty;
 
-                for (int i = 0; i < res.EntryCount; i++)
-                {
-                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                    if (i == 0)
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
-                    }
-                }
-            }
+        //        for (int i = 0; i < res.EntryCount; i++)
+        //        {
+        //            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+        //            if (i == 0)
+        //            {
+        //                sb.AppendLine($"{res.Name,-OffsetAfterName}{mec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{res.GuestCount,-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+        //            }
+        //            else
+        //            {
+        //                sb.AppendLine($"{res.Name,-OffsetAfterName}{followMec,-OffsetAfterMEventCode}{res.DepartDate,-OffsetAfterDate}{"\"",-OffsetAfterCount}{res.Type,-OffsetAfterType}");
+        //            }
+        //        }
+        //    }
 
-            // Print the passes
-            sb.AppendLine();
-            sb.AppendLine($"Overnight Passes: [Total: {OvernightPassCount}]");
-            for (int i = 0; i < OvernightPassDates.Count; i++)
-            {
-                sb.AppendLine($"{OvernightPassDates[i].Substring(0,5)}: {OvernightPassCounts[i]}");
-            }
+        //    // Print the passes
+        //    sb.AppendLine();
+        //    sb.AppendLine($"Overnight Passes: [Total: {OvernightPassCount}]");
+        //    for (int i = 0; i < OvernightPassDates.Count; i++)
+        //    {
+        //        sb.AppendLine($"{OvernightPassDates[i].Substring(0,5)}: {OvernightPassCounts[i]}");
+        //    }
 
-            return sb.ToString();
-        }
+        //    return sb.ToString();
+        //}
 
         #endregion
 
@@ -681,7 +483,7 @@ namespace GHAR_Classes
             return parsedLine.Count > dateIndex && DateTime.TryParse(parsedLine[dateIndex], out DateTime _);
         }
 
-        void AddOrIncrement(RosterReservation res, List<RosterReservation> list)
+        static void AddOrIncrement(RosterReservation res, List<RosterReservation> list)
         {
             int otherIndex = list.FindIndex(e => e.Name == res.Name && e.Type == res.Type && e.TimeValue == res.TimeValue);
             if (otherIndex == -1)
@@ -696,6 +498,20 @@ namespace GHAR_Classes
             }
         }
 
+        static void AddOrIncrement(OvPassRecord opr, List<OvPassRecord> list)
+        {
+            int otherIndex = list.FindIndex(e => e.Date == opr.Date);
+            if (otherIndex == -1)
+            {
+                opr.Count = 1;
+                list.Add(opr);
+            }
+            else
+            {
+                list[otherIndex].Count++;
+            }
+        }
+
         static string CreateEventCode(RosterReservation res)
         {
             string returnString = string.Empty;
@@ -706,19 +522,15 @@ namespace GHAR_Classes
                     returnString = "Ov";
                     break;
                 case GuestType.Tour:
-                {
                     string[] split = res.DisplayTime.Split(':');
-                    string subTime = split[1].Substring(0, 1) == "0" ? string.Empty : split[1].Substring(0, 1);
+                    string subTime = split[1][0] == '0' ? string.Empty : ":" + split[1][0];
                     returnString = $"Tr.{split[0]}{subTime}{split[1].Substring(split[1].Length - 2, 1)}";
                     break;
-                }
                 case GuestType.Tea:
-                {
-                    string[] split = res.DisplayTime.Split(':');
-                    string subTime = split[1].Substring(0, 1) == "0" ? string.Empty : split[1].Substring(0, 1);
+                    split = res.DisplayTime.Split(':');
+                    subTime = split[1][0] == '0' ? string.Empty : ":" + split[1][0];
                     returnString = $"Te.{split[0]}{subTime}{split[1].Substring(split[1].Length - 2, 1)}";
                     break;
-                }
                 case GuestType.Madrigal:
                     returnString = "MAD";
                     break;

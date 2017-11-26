@@ -27,7 +27,9 @@ namespace GHAR_Classes
         public string DepartDate { get; set; }
         public string DisplayTime { get; set; }
         public int TimeValue { get; set; }
-        public List<string> EventCodes { get; set; }
+        public List<string> EventCodes { get; } = new List<string>();
+
+        public string TotalEventsCode { get; set; } = string.Empty;
 
         #endregion
 
@@ -75,7 +77,7 @@ namespace GHAR_Classes
 
         public override string ToString()
         {
-            return $"{Name} - {EntryCount}";
+            return $"{Name} - {EntryCount} - {DisplayTime} - {Type}";
         }
 
         #endregion

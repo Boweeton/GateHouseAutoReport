@@ -22,7 +22,7 @@ namespace GHAR_WindowsApp
             rm = new ReportManager();
             am = new ApplicationManipulator();
             createOvernightsButton.Enabled = false;
-            createToursAndTeasButton.Enabled = false;
+            createDayEventsButton.Enabled = false;
             nothingChangedMessage.Text = string.Empty;
         }
 
@@ -31,36 +31,6 @@ namespace GHAR_WindowsApp
             nothingChangedMessage.Text = string.Empty;
             nothingChangedMessage.BackColor = BackColor;
             nothingChangedMessage.ForeColor = Color.White;
-        }
-
-        void OnLoadTodaysGuestlistButtonClick(object sender, EventArgs e)
-        {
-#if DEBUG
-            string message = null;
-#else
-            string message = am.RunMagasysArrivalsReport($"{DateTime.Today:d}", $"{DateTime.Today:d}");
-#endif
-            if (message != null)
-            {
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-#if DEBUG
-            masterPath = @"D:\AutoReport_[RptOf11.26.2017]_[CrtOn11-19-17--10.32.55PM].txt";
-#else
-            masterPath = am.FilePath;
-#endif
-
-            // Read in the report
-            rm.CreateEventLists();
-            //rm.ReadInArrivalsReport(masterPath);
-            rm.CalculateValues();
-            UpdateResultsBanner();
-
-            createOvernightsButton.Enabled = true;
-            createToursAndTeasButton.Enabled = true;
-
-            UpdateLastRunText();
         }
 
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
@@ -76,11 +46,11 @@ namespace GHAR_WindowsApp
 
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
         {
-            string text = rm.ToStringForOvernights();
+            //string text = rm.ToStringForOvernights();
             Directory.CreateDirectory(Constants.CreatedReportsFolder);
             string path = Path.Combine(Constants.CreatedReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
-            File.WriteAllText(path, text);
+            //File.WriteAllText(path, text);
 
             Process.Start(path);
         }
@@ -133,7 +103,7 @@ namespace GHAR_WindowsApp
             UpdateResultsBanner();
 
             createOvernightsButton.Enabled = true;
-            createToursAndTeasButton.Enabled = true;
+            createDayEventsButton.Enabled = true;
 
             UpdateLastRunText();
         }
@@ -157,6 +127,8 @@ namespace GHAR_WindowsApp
         void testButton_Click(object sender, EventArgs e)
         {
             rm.ReadInBothReports(@"I:\ToursReport7.txt", @"I:\OtherArrivalsReport2.txt");
+            rm.CalculateValues();
+            rm.ToStringForTeasAndTours();
         }
     }
 }
