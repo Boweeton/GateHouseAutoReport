@@ -11,8 +11,12 @@ namespace GHAR_Classes
     {
         #region Data
 
+        // Local Data
+        const int NameLength = 16;
+        const int EndOfNameIndex = 28;
         const int MaxTourSize = 25;
-        List<EventRoster> oldList;
+        List<RosterReservation> lastRun = new List<RosterReservation>();
+        List<EventRoster> oldList; // old
 
         #endregion
 
@@ -24,17 +28,12 @@ namespace GHAR_Classes
 
         #region Properties
 
-        // Local Data
-        const int NameLength = 16;
-
-        const int EndOfNameIndex = 28;
-
         // Reporting Data
-        public List<EventRoster> ListOfEvents { get; set; }
+        public List<EventRoster> ListOfEvents { get; set; } // old
         public int DayPasseCount { get; set; }
         public int OvernightPassCount { get; set; }
-        public List<string> OvernightPassDates { get; set; }
-        public List<int> OvernightPassCounts { get; set; }
+        public List<string> OvernightPassDates { get; set; } // old
+        public List<int> OvernightPassCounts { get; set; } // old
 
         // Data
         public string[] FileLines { get; set; }
@@ -42,6 +41,7 @@ namespace GHAR_Classes
         public string ToursReportPath { get; set; }
         public string OtherArrivalsReportPath { get; set; }
         public List<RosterReservation> AllReservations { get; } = new List<RosterReservation>();
+        public List<OvPassRecord> OvPassRecords { get; set; }
 
         #endregion
 
@@ -187,6 +187,10 @@ namespace GHAR_Classes
                     }
                 }
             }
+
+            // See if the list has changed since the last run
+            ChangedAtLastRun = lastRun.Count != AllReservations.Count;
+            lastRun = AllReservations;
 
             // If everything was parsed and found correctly
             return true;
@@ -376,6 +380,45 @@ namespace GHAR_Classes
 
         public void CalculateValues()
         {
+            // Insert the O-Event Codes
+            foreach (RosterReservation resCurrent in AllReservations)
+            {
+                foreach (RosterReservation resInner in AllReservations)
+                {
+                    resInner.EventCodes = new List<string>();
+                    if (resCurrent != resInner)
+                    {
+                        if (resCurrent.Name == resInner.Name)
+                        {
+                            resInner.EventCodes.Add(CreateEventCode(resCurrent));
+                        }
+                    }
+                }
+            }
+
+            // Calculate Day Passes
+            DayPasseCount = 0;
+            foreach (RosterReservation res in AllReservations)
+            {
+                if (res.Type != GuestType.Overnight)
+                {
+                    DayPasseCount += res.EntryCount;
+                }
+            }
+
+            // Calculate Overnight Passes
+            OvPassRecords = new List<OvPassRecord>();
+            foreach (RosterReservation res in AllReservations)
+            {
+                if (res.Type == GuestType.Overnight)
+                {
+                    
+                }
+            }
+
+
+            // ------------------------------------------------------------------------------------------------------
+
             // Sort the data
             foreach (EventRoster roster in ListOfEvents)
             {
@@ -651,6 +694,43 @@ namespace GHAR_Classes
                 list[otherIndex].EntryCount++;
                 list[otherIndex].GuestCount += res.GuestCount;
             }
+        }
+
+        static string CreateEventCode(RosterReservation res)
+        {
+            string returnString = string.Empty;
+
+            switch (res.Type)
+            {
+                case GuestType.Overnight:
+                    returnString = "Ov";
+                    break;
+                case GuestType.Tour:
+                {
+                    string[] split = res.DisplayTime.Split(':');
+                    string subTime = split[1].Substring(0, 1) == "0" ? string.Empty : split[1].Substring(0, 1);
+                    returnString = $"Tr.{split[0]}{subTime}{split[1].Substring(split[1].Length - 2, 1)}";
+                    break;
+                }
+                case GuestType.Tea:
+                {
+                    string[] split = res.DisplayTime.Split(':');
+                    string subTime = split[1].Substring(0, 1) == "0" ? string.Empty : split[1].Substring(0, 1);
+                    returnString = $"Te.{split[0]}{subTime}{split[1].Substring(split[1].Length - 2, 1)}";
+                    break;
+                }
+                case GuestType.Madrigal:
+                    returnString = "MAD";
+                    break;
+                case GuestType.Concert:
+                    returnString = "CON";
+                    break;
+                case GuestType.Dinner:
+                    returnString = "DIN";
+                    break;
+            }
+
+            return returnString;
         }
 
         #endregion
