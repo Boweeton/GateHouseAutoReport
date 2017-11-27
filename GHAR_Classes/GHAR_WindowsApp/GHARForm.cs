@@ -94,7 +94,12 @@ namespace GHAR_WindowsApp
         {
             // Check to see if anyhting has changed
             RunTimer();
-            if (rm.ChangedAtLastRun)
+            if (rm.IncompleteDataLoad)
+            {
+                nothingChangedMessage.BackColor = Color.DarkOrange;
+                nothingChangedMessage.Text = "Incomplete data load";
+            }
+            else if (rm.ChangedAtLastRun)
             {
                 nothingChangedMessage.BackColor = Color.ForestGreen;
                 nothingChangedMessage.Text = "New data loaded";
@@ -102,7 +107,7 @@ namespace GHAR_WindowsApp
             else
             {
                 nothingChangedMessage.BackColor = Color.DodgerBlue;
-                nothingChangedMessage.Text = "Nothing was different";
+                nothingChangedMessage.Text = "No data was different";
             }
         }
     }

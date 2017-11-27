@@ -18,6 +18,7 @@ namespace GHAR_WindowsApp
         readonly string toursReportPath;
         readonly string arrivalsReportPath;
         ReportManager rp;
+        bool DidCloseCorrectly;
 
         public ManualPathForm(ReportManager rpParam)
         {
@@ -38,14 +39,15 @@ namespace GHAR_WindowsApp
                 rp.ReadInBothReports(toursReportPath, arrivalsReportPath);
                 rp.CalculateValues();
 
+                DidCloseCorrectly = true;
                 Close();
             }
-            else if (File.Exists(toursReportPath))
+            else if (File.Exists(arrivalsReportPath))
             {
                 // If the does not exist, pop up a message to say so
                 MessageBox.Show("The Tours Report was never created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (File.Exists(arrivalsReportPath))
+            else if (File.Exists(toursReportPath))
             {
                 // If the does not exist, pop up a message to say so
                 MessageBox.Show("The Arrivals Report was never created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -59,6 +61,8 @@ namespace GHAR_WindowsApp
 
         void ManualPathForm_Load(object sender, EventArgs e)
         {
+            DidCloseCorrectly = false;
+            rp.IncompleteDataLoad = false;
             toursReportPathTextBox.Text = toursReportPath;
             otherArrivalsReportPathTextBox.Text = arrivalsReportPath;
         }
@@ -76,6 +80,14 @@ namespace GHAR_WindowsApp
         void OnOtherArrivalsReportPathCopyButtonClick(object sender, EventArgs e)
         {
             Clipboard.SetText(otherArrivalsReportPathTextBox.Text);
+        }
+
+        void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!DidCloseCorrectly)
+            {
+                rp.IncompleteDataLoad = true;
+            }
         }
     }
 }

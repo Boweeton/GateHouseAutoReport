@@ -35,6 +35,7 @@ namespace GHAR_Classes
 
         // Data
         public string[] FileLines { get; set; }
+        public bool IncompleteDataLoad { get; set; }
         public bool ChangedAtLastRun { get; set; }
         public string ToursReportPath { get; set; }
         public string OtherArrivalsReportPath { get; set; }
@@ -87,6 +88,9 @@ namespace GHAR_Classes
                     {
                         case "CONCER":
                             tmp.Type = GuestType.Concert;
+                            break;
+                        case "MADRIG":
+                            tmp.Type = GuestType.Madrigal;
                             break;
                         case "DINNER":
                             tmp.Type = GuestType.Dinner;
@@ -513,29 +517,6 @@ namespace GHAR_Classes
         #endregion
 
         #region Private Methods
-
-        static bool IsCorrectDateFormat(string input)
-            {
-                return DateTime.TryParse(input, out DateTime dateValue);
-            }
-
-        static bool ListsAreDifferent(List<EventRoster> list1, List<EventRoster> list2)
-        {
-            if (list1 == null || list2 == null)
-            {
-                return true;
-            }
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (int i = 0; i < list1.Count; i++)
-            {
-                if (list1[i].Reservations.Count != list2[i].Reservations.Count)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         static bool IsEntryLine(IReadOnlyList<string> parsedLine, int dateIndex)
         {

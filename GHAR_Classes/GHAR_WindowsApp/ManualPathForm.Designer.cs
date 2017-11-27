@@ -138,6 +138,7 @@
             this.Name = "ManualPathForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manually Generate Path";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.ManualPathForm_Load);
             this.toursReportPathGroupBox.ResumeLayout(false);
             this.toursReportPathGroupBox.PerformLayout();
