@@ -42,10 +42,10 @@
             // 
             // calculateButton
             // 
-            this.calculateButton.Location = new System.Drawing.Point(304, 124);
-            this.calculateButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.calculateButton.Location = new System.Drawing.Point(405, 153);
+            this.calculateButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.calculateButton.Name = "calculateButton";
-            this.calculateButton.Size = new System.Drawing.Size(78, 37);
+            this.calculateButton.Size = new System.Drawing.Size(104, 46);
             this.calculateButton.TabIndex = 0;
             this.calculateButton.Text = "Calculate";
             this.calculateButton.UseVisualStyleBackColor = true;
@@ -54,11 +54,11 @@
             // otherArrivalsReportPathTextBox
             // 
             this.otherArrivalsReportPathTextBox.BackColor = System.Drawing.Color.White;
-            this.otherArrivalsReportPathTextBox.Location = new System.Drawing.Point(5, 18);
-            this.otherArrivalsReportPathTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.otherArrivalsReportPathTextBox.Location = new System.Drawing.Point(7, 22);
+            this.otherArrivalsReportPathTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.otherArrivalsReportPathTextBox.Name = "otherArrivalsReportPathTextBox";
             this.otherArrivalsReportPathTextBox.ReadOnly = true;
-            this.otherArrivalsReportPathTextBox.Size = new System.Drawing.Size(258, 20);
+            this.otherArrivalsReportPathTextBox.Size = new System.Drawing.Size(343, 22);
             this.otherArrivalsReportPathTextBox.TabIndex = 1;
             this.otherArrivalsReportPathTextBox.TextChanged += new System.EventHandler(this.pathTextBox_TextChanged);
             // 
@@ -66,11 +66,11 @@
             // 
             this.toursReportPathGroupBox.Controls.Add(this.toursReportPathCopyButton);
             this.toursReportPathGroupBox.Controls.Add(this.toursReportPathTextBox);
-            this.toursReportPathGroupBox.Location = new System.Drawing.Point(10, 11);
-            this.toursReportPathGroupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.toursReportPathGroupBox.Location = new System.Drawing.Point(13, 14);
+            this.toursReportPathGroupBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.toursReportPathGroupBox.Name = "toursReportPathGroupBox";
-            this.toursReportPathGroupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.toursReportPathGroupBox.Size = new System.Drawing.Size(379, 47);
+            this.toursReportPathGroupBox.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.toursReportPathGroupBox.Size = new System.Drawing.Size(505, 58);
             this.toursReportPathGroupBox.TabIndex = 2;
             this.toursReportPathGroupBox.TabStop = false;
             this.toursReportPathGroupBox.Text = "Tours Report Path";
@@ -78,10 +78,10 @@
             // toursReportPathCopyButton
             // 
             this.toursReportPathCopyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toursReportPathCopyButton.Location = new System.Drawing.Point(270, 14);
-            this.toursReportPathCopyButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.toursReportPathCopyButton.Location = new System.Drawing.Point(360, 17);
+            this.toursReportPathCopyButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.toursReportPathCopyButton.Name = "toursReportPathCopyButton";
-            this.toursReportPathCopyButton.Size = new System.Drawing.Size(104, 25);
+            this.toursReportPathCopyButton.Size = new System.Drawing.Size(139, 31);
             this.toursReportPathCopyButton.TabIndex = 3;
             this.toursReportPathCopyButton.Text = "Copy to Clipboard";
             this.toursReportPathCopyButton.UseVisualStyleBackColor = true;
@@ -90,11 +90,11 @@
             // toursReportPathTextBox
             // 
             this.toursReportPathTextBox.BackColor = System.Drawing.Color.White;
-            this.toursReportPathTextBox.Location = new System.Drawing.Point(4, 18);
-            this.toursReportPathTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.toursReportPathTextBox.Location = new System.Drawing.Point(5, 22);
+            this.toursReportPathTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.toursReportPathTextBox.Name = "toursReportPathTextBox";
             this.toursReportPathTextBox.ReadOnly = true;
-            this.toursReportPathTextBox.Size = new System.Drawing.Size(258, 20);
+            this.toursReportPathTextBox.Size = new System.Drawing.Size(343, 22);
             this.toursReportPathTextBox.TabIndex = 1;
             this.toursReportPathTextBox.TextChanged += new System.EventHandler(this.pathTextBox_TextChanged);
             // 
@@ -102,11 +102,11 @@
             // 
             this.otherArrivalsReportPathGroupBox.Controls.Add(this.otherArrivalsReportPathCopyButton);
             this.otherArrivalsReportPathGroupBox.Controls.Add(this.otherArrivalsReportPathTextBox);
-            this.otherArrivalsReportPathGroupBox.Location = new System.Drawing.Point(9, 63);
-            this.otherArrivalsReportPathGroupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.otherArrivalsReportPathGroupBox.Location = new System.Drawing.Point(12, 78);
+            this.otherArrivalsReportPathGroupBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.otherArrivalsReportPathGroupBox.Name = "otherArrivalsReportPathGroupBox";
-            this.otherArrivalsReportPathGroupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.otherArrivalsReportPathGroupBox.Size = new System.Drawing.Size(379, 47);
+            this.otherArrivalsReportPathGroupBox.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.otherArrivalsReportPathGroupBox.Size = new System.Drawing.Size(505, 58);
             this.otherArrivalsReportPathGroupBox.TabIndex = 2;
             this.otherArrivalsReportPathGroupBox.TabStop = false;
             this.otherArrivalsReportPathGroupBox.Text = "Other Arrivals Report Path";
@@ -114,10 +114,10 @@
             // otherArrivalsReportPathCopyButton
             // 
             this.otherArrivalsReportPathCopyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.otherArrivalsReportPathCopyButton.Location = new System.Drawing.Point(270, 14);
-            this.otherArrivalsReportPathCopyButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.otherArrivalsReportPathCopyButton.Location = new System.Drawing.Point(360, 17);
+            this.otherArrivalsReportPathCopyButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.otherArrivalsReportPathCopyButton.Name = "otherArrivalsReportPathCopyButton";
-            this.otherArrivalsReportPathCopyButton.Size = new System.Drawing.Size(104, 25);
+            this.otherArrivalsReportPathCopyButton.Size = new System.Drawing.Size(139, 31);
             this.otherArrivalsReportPathCopyButton.TabIndex = 3;
             this.otherArrivalsReportPathCopyButton.Text = "Copy to Clipboard";
             this.otherArrivalsReportPathCopyButton.UseVisualStyleBackColor = true;
@@ -125,14 +125,14 @@
             // 
             // ManualPathForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 171);
+            this.ClientSize = new System.Drawing.Size(525, 210);
             this.Controls.Add(this.otherArrivalsReportPathGroupBox);
             this.Controls.Add(this.toursReportPathGroupBox);
             this.Controls.Add(this.calculateButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ManualPathForm";

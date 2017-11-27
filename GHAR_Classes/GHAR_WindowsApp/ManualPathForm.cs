@@ -15,15 +15,16 @@ namespace GHAR_WindowsApp
     public partial class ManualPathForm : Form
     {
         // Data
-        readonly string displayPath;
+        readonly string toursReportPath;
+        readonly string arrivalsReportPath;
         ReportManager rp;
 
-        public ManualPathForm(ApplicationManipulator amParam, ReportManager rpParam)
+        public ManualPathForm(ReportManager rpParam)
         {
             InitializeComponent();
-            amParam.FindPath($"{DateTime.Today:d}");
-            displayPath = amParam.FilePath;
             rp = rpParam;
+            toursReportPath = rp.GeneratePath("TourReport", $"{DateTime.Today:M/d/yy}");
+            arrivalsReportPath = rp.GeneratePath("ArrivalReport", $"{DateTime.Today:M/d/yy}");
 
             otherArrivalsReportPathTextBox.Click += (sender, args) => otherArrivalsReportPathTextBox.Select(0, otherArrivalsReportPathTextBox.Text.Length);
         }
@@ -31,25 +32,35 @@ namespace GHAR_WindowsApp
         void OnCalculateButtonClick(object sender, EventArgs e)
         {
             // Check if the file exists
-            if (File.Exists(displayPath))
+            if (File.Exists(toursReportPath) && File.Exists(arrivalsReportPath))
             {
                 // Read in the report
-                //rp.CreateEventLists();
-                //rp.ReadInArrivalsReport(displayPath);
+                rp.ReadInBothReports(toursReportPath, arrivalsReportPath);
                 rp.CalculateValues();
 
                 Close();
             }
+            else if (File.Exists(toursReportPath))
+            {
+                // If the does not exist, pop up a message to say so
+                MessageBox.Show("The Tours Report was never created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (File.Exists(arrivalsReportPath))
+            {
+                // If the does not exist, pop up a message to say so
+                MessageBox.Show("The Arrivals Report was never created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             else
             {
                 // If the does not exist, pop up a message to say so
-                MessageBox.Show("The file was never created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Neither of the reports were created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         void ManualPathForm_Load(object sender, EventArgs e)
         {
-            otherArrivalsReportPathTextBox.Text = displayPath;
+            toursReportPathTextBox.Text = toursReportPath;
+            otherArrivalsReportPathTextBox.Text = arrivalsReportPath;
         }
 
         void pathTextBox_TextChanged(object sender, EventArgs e)

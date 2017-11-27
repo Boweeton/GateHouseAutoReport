@@ -180,7 +180,6 @@ namespace GHAR_Classes
 
         public void FindPath(string startDate)
         {
-            Directory.CreateDirectory(Constants.RawDataReportsFolder);
             FilePath = GeneratePath(startDate);
         }
 
@@ -249,6 +248,7 @@ namespace GHAR_Classes
 
         public string GeneratePath(string date)
         {
+            Directory.CreateDirectory(Constants.RawDataReportsFolder);
             return Path.GetFullPath(Path.Combine(Constants.RawDataReportsFolder, $"AutoReport_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt"));
         }
     }

@@ -37,7 +37,6 @@
             this.lastRunBox = new System.Windows.Forms.GroupBox();
             this.nothingChangedMessage = new System.Windows.Forms.TextBox();
             this.resultsDisplayGroupBox = new System.Windows.Forms.GroupBox();
-            this.testButton = new System.Windows.Forms.Button();
             this.createReportsGroupBox = new System.Windows.Forms.GroupBox();
             this.buttonsGroup.SuspendLayout();
             this.lastRunBox.SuspendLayout();
@@ -48,10 +47,10 @@
             // createDayEventsButton
             // 
             this.createDayEventsButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createDayEventsButton.Location = new System.Drawing.Point(5, 65);
-            this.createDayEventsButton.Margin = new System.Windows.Forms.Padding(2);
+            this.createDayEventsButton.Location = new System.Drawing.Point(7, 80);
+            this.createDayEventsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createDayEventsButton.Name = "createDayEventsButton";
-            this.createDayEventsButton.Size = new System.Drawing.Size(171, 43);
+            this.createDayEventsButton.Size = new System.Drawing.Size(228, 53);
             this.createDayEventsButton.TabIndex = 1;
             this.createDayEventsButton.Text = "Create Day Events Report";
             this.createDayEventsButton.UseVisualStyleBackColor = false;
@@ -60,10 +59,10 @@
             // createOvernightsButton
             // 
             this.createOvernightsButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createOvernightsButton.Location = new System.Drawing.Point(5, 18);
-            this.createOvernightsButton.Margin = new System.Windows.Forms.Padding(2);
+            this.createOvernightsButton.Location = new System.Drawing.Point(7, 22);
+            this.createOvernightsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createOvernightsButton.Name = "createOvernightsButton";
-            this.createOvernightsButton.Size = new System.Drawing.Size(171, 43);
+            this.createOvernightsButton.Size = new System.Drawing.Size(228, 53);
             this.createOvernightsButton.TabIndex = 2;
             this.createOvernightsButton.Text = "Create Overnights Report";
             this.createOvernightsButton.UseVisualStyleBackColor = false;
@@ -72,22 +71,22 @@
             // lastRunTextBox
             // 
             this.lastRunTextBox.BackColor = System.Drawing.Color.White;
-            this.lastRunTextBox.Location = new System.Drawing.Point(4, 17);
-            this.lastRunTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.lastRunTextBox.Location = new System.Drawing.Point(5, 21);
+            this.lastRunTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lastRunTextBox.Name = "lastRunTextBox";
             this.lastRunTextBox.ReadOnly = true;
-            this.lastRunTextBox.Size = new System.Drawing.Size(171, 20);
+            this.lastRunTextBox.Size = new System.Drawing.Size(227, 22);
             this.lastRunTextBox.TabIndex = 0;
             this.lastRunTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonsGroup
             // 
             this.buttonsGroup.Controls.Add(this.manuallyGeneratePathButton);
-            this.buttonsGroup.Location = new System.Drawing.Point(20, 122);
-            this.buttonsGroup.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonsGroup.Location = new System.Drawing.Point(27, 150);
+            this.buttonsGroup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonsGroup.Name = "buttonsGroup";
-            this.buttonsGroup.Padding = new System.Windows.Forms.Padding(2);
-            this.buttonsGroup.Size = new System.Drawing.Size(181, 67);
+            this.buttonsGroup.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonsGroup.Size = new System.Drawing.Size(241, 82);
             this.buttonsGroup.TabIndex = 4;
             this.buttonsGroup.TabStop = false;
             this.buttonsGroup.Text = "Commands";
@@ -95,10 +94,10 @@
             // manuallyGeneratePathButton
             // 
             this.manuallyGeneratePathButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.manuallyGeneratePathButton.Location = new System.Drawing.Point(4, 17);
-            this.manuallyGeneratePathButton.Margin = new System.Windows.Forms.Padding(2);
+            this.manuallyGeneratePathButton.Location = new System.Drawing.Point(5, 21);
+            this.manuallyGeneratePathButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.manuallyGeneratePathButton.Name = "manuallyGeneratePathButton";
-            this.manuallyGeneratePathButton.Size = new System.Drawing.Size(171, 43);
+            this.manuallyGeneratePathButton.Size = new System.Drawing.Size(228, 53);
             this.manuallyGeneratePathButton.TabIndex = 0;
             this.manuallyGeneratePathButton.Text = "Generate Paths";
             this.manuallyGeneratePathButton.UseVisualStyleBackColor = false;
@@ -107,68 +106,62 @@
             // lastRunBox
             // 
             this.lastRunBox.Controls.Add(this.lastRunTextBox);
-            this.lastRunBox.Location = new System.Drawing.Point(20, 14);
-            this.lastRunBox.Margin = new System.Windows.Forms.Padding(2);
+            this.lastRunBox.Location = new System.Drawing.Point(27, 17);
+            this.lastRunBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lastRunBox.Name = "lastRunBox";
-            this.lastRunBox.Padding = new System.Windows.Forms.Padding(2);
-            this.lastRunBox.Size = new System.Drawing.Size(180, 43);
+            this.lastRunBox.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lastRunBox.Size = new System.Drawing.Size(240, 53);
             this.lastRunBox.TabIndex = 5;
             this.lastRunBox.TabStop = false;
             this.lastRunBox.Text = "Last Run At";
             // 
             // nothingChangedMessage
             // 
-            this.nothingChangedMessage.Location = new System.Drawing.Point(4, 19);
+            this.nothingChangedMessage.Location = new System.Drawing.Point(5, 23);
+            this.nothingChangedMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.nothingChangedMessage.Name = "nothingChangedMessage";
-            this.nothingChangedMessage.Size = new System.Drawing.Size(171, 20);
+            this.nothingChangedMessage.Size = new System.Drawing.Size(227, 22);
             this.nothingChangedMessage.TabIndex = 7;
             this.nothingChangedMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // resultsDisplayGroupBox
             // 
             this.resultsDisplayGroupBox.Controls.Add(this.nothingChangedMessage);
-            this.resultsDisplayGroupBox.Location = new System.Drawing.Point(20, 62);
+            this.resultsDisplayGroupBox.Location = new System.Drawing.Point(27, 76);
+            this.resultsDisplayGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.resultsDisplayGroupBox.Name = "resultsDisplayGroupBox";
-            this.resultsDisplayGroupBox.Size = new System.Drawing.Size(180, 49);
+            this.resultsDisplayGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.resultsDisplayGroupBox.Size = new System.Drawing.Size(240, 60);
             this.resultsDisplayGroupBox.TabIndex = 8;
             this.resultsDisplayGroupBox.TabStop = false;
             this.resultsDisplayGroupBox.Text = "Results";
-            // 
-            // testButton
-            // 
-            this.testButton.Location = new System.Drawing.Point(25, 337);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(75, 23);
-            this.testButton.TabIndex = 9;
-            this.testButton.Text = "test";
-            this.testButton.UseVisualStyleBackColor = true;
-            this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // createReportsGroupBox
             // 
             this.createReportsGroupBox.Controls.Add(this.createDayEventsButton);
             this.createReportsGroupBox.Controls.Add(this.createOvernightsButton);
-            this.createReportsGroupBox.Location = new System.Drawing.Point(20, 194);
+            this.createReportsGroupBox.Location = new System.Drawing.Point(27, 239);
+            this.createReportsGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.createReportsGroupBox.Name = "createReportsGroupBox";
-            this.createReportsGroupBox.Size = new System.Drawing.Size(183, 115);
+            this.createReportsGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.createReportsGroupBox.Size = new System.Drawing.Size(244, 142);
             this.createReportsGroupBox.TabIndex = 10;
             this.createReportsGroupBox.TabStop = false;
             this.createReportsGroupBox.Text = "Generate Reports";
             // 
             // MainScreenForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(226, 491);
+            this.ClientSize = new System.Drawing.Size(301, 411);
             this.Controls.Add(this.createReportsGroupBox);
-            this.Controls.Add(this.testButton);
             this.Controls.Add(this.resultsDisplayGroupBox);
             this.Controls.Add(this.lastRunBox);
             this.Controls.Add(this.buttonsGroup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "MainScreenForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -193,7 +186,6 @@
         private System.Windows.Forms.TextBox nothingChangedMessage;
         private System.Windows.Forms.GroupBox resultsDisplayGroupBox;
         private System.Windows.Forms.Button manuallyGeneratePathButton;
-        private System.Windows.Forms.Button testButton;
         private System.Windows.Forms.GroupBox createReportsGroupBox;
     }
 }

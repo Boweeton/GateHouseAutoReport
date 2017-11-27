@@ -33,11 +33,28 @@ namespace GHAR_WindowsApp
             nothingChangedMessage.ForeColor = Color.White;
         }
 
+        void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
+        {
+            using (ManualPathForm m = new ManualPathForm(rm))
+            {
+                //m.Show();
+                if (m.ShowDialog() == DialogResult.OK)
+                {
+                }
+            }
+            UpdateResultsBanner();
+
+            createOvernightsButton.Enabled = true;
+            createDayEventsButton.Enabled = true;
+
+            UpdateLastRunText();
+        }
+
         void OnCreateToursAndTeasButtonClick(object sender, EventArgs e)
         {
             string text = rm.ToStringForTeasAndTours();
             Directory.CreateDirectory(Constants.CreatedReportsFolder);
-            string path = Path.Combine(Constants.CreatedReportsFolder, $"ToursAndTeas_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
+            string path = Path.Combine(Constants.CreatedReportsFolder, $"DayEvents_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
             File.WriteAllText(path, text);
 
@@ -46,11 +63,11 @@ namespace GHAR_WindowsApp
 
         void OnCreateOvernightsButtonClick(object sender, EventArgs e)
         {
-            //string text = rm.ToStringForOvernights();
+            string text = rm.ToStringForOvernights();
             Directory.CreateDirectory(Constants.CreatedReportsFolder);
             string path = Path.Combine(Constants.CreatedReportsFolder, $"Overnights_{DateTime.Today:yy-MM-dd}--{DateTime.Now:tt_hh.mm}.txt");
 
-            //File.WriteAllText(path, text);
+            File.WriteAllText(path, text);
 
             Process.Start(path);
         }
@@ -58,24 +75,6 @@ namespace GHAR_WindowsApp
         void UpdateLastRunText()
         {
             lastRunTextBox.Text = $"{DateTime.Now:hh:mm tt}";
-        }
-
-        static bool ListsAreDifferent(List<EventRoster> list1, List<EventRoster> list2)
-        {
-            if (list1 == null || list2 == null)
-            {
-                return true;
-            }
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (int i = 0; i < list1.Count; i++)
-            {
-                if (list1[i].Reservations.Count != list2[i].Reservations.Count)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         async void RunTimer()
@@ -91,23 +90,6 @@ namespace GHAR_WindowsApp
             nothingChangedMessage.BackColor = BackColor;
         }
 
-        void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
-        {
-            using (ManualPathForm m = new ManualPathForm(am, rm))
-            {
-                //m.Show();
-                if (m.ShowDialog() == DialogResult.OK)
-                {
-                }
-            }
-            UpdateResultsBanner();
-
-            createOvernightsButton.Enabled = true;
-            createDayEventsButton.Enabled = true;
-
-            UpdateLastRunText();
-        }
-
         public void UpdateResultsBanner()
         {
             // Check to see if anyhting has changed
@@ -115,20 +97,13 @@ namespace GHAR_WindowsApp
             if (rm.ChangedAtLastRun)
             {
                 nothingChangedMessage.BackColor = Color.ForestGreen;
-                nothingChangedMessage.Text = "Sucessfully loaded new report";
+                nothingChangedMessage.Text = "New data loaded";
             }
             else
             {
                 nothingChangedMessage.BackColor = Color.DodgerBlue;
                 nothingChangedMessage.Text = "Nothing was different";
             }
-        }
-
-        void testButton_Click(object sender, EventArgs e)
-        {
-            rm.ReadInBothReports(@"I:\ToursReport7.txt", @"I:\OtherArrivalsReport2.txt");
-            rm.CalculateValues();
-            rm.ToStringForTeasAndTours();
         }
     }
 }
