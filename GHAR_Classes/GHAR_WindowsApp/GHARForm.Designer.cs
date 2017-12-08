@@ -38,6 +38,7 @@
             this.nothingChangedMessage = new System.Windows.Forms.TextBox();
             this.resultsDisplayGroupBox = new System.Windows.Forms.GroupBox();
             this.createReportsGroupBox = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.buttonsGroup.SuspendLayout();
             this.lastRunBox.SuspendLayout();
             this.resultsDisplayGroupBox.SuspendLayout();
@@ -118,7 +119,7 @@
             // nothingChangedMessage
             // 
             this.nothingChangedMessage.Location = new System.Drawing.Point(5, 23);
-            this.nothingChangedMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nothingChangedMessage.Margin = new System.Windows.Forms.Padding(4);
             this.nothingChangedMessage.Name = "nothingChangedMessage";
             this.nothingChangedMessage.Size = new System.Drawing.Size(227, 22);
             this.nothingChangedMessage.TabIndex = 7;
@@ -128,9 +129,9 @@
             // 
             this.resultsDisplayGroupBox.Controls.Add(this.nothingChangedMessage);
             this.resultsDisplayGroupBox.Location = new System.Drawing.Point(27, 76);
-            this.resultsDisplayGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.resultsDisplayGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.resultsDisplayGroupBox.Name = "resultsDisplayGroupBox";
-            this.resultsDisplayGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.resultsDisplayGroupBox.Padding = new System.Windows.Forms.Padding(4);
             this.resultsDisplayGroupBox.Size = new System.Drawing.Size(240, 60);
             this.resultsDisplayGroupBox.TabIndex = 8;
             this.resultsDisplayGroupBox.TabStop = false;
@@ -141,19 +142,30 @@
             this.createReportsGroupBox.Controls.Add(this.createDayEventsButton);
             this.createReportsGroupBox.Controls.Add(this.createOvernightsButton);
             this.createReportsGroupBox.Location = new System.Drawing.Point(27, 239);
-            this.createReportsGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.createReportsGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.createReportsGroupBox.Name = "createReportsGroupBox";
-            this.createReportsGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.createReportsGroupBox.Padding = new System.Windows.Forms.Padding(4);
             this.createReportsGroupBox.Size = new System.Drawing.Size(244, 142);
             this.createReportsGroupBox.TabIndex = 10;
             this.createReportsGroupBox.TabStop = false;
             this.createReportsGroupBox.Text = "Generate Reports";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(51, 422);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(177, 74);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainScreenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 411);
+            this.ClientSize = new System.Drawing.Size(301, 541);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.createReportsGroupBox);
             this.Controls.Add(this.resultsDisplayGroupBox);
             this.Controls.Add(this.lastRunBox);
@@ -187,6 +199,7 @@
         private System.Windows.Forms.GroupBox resultsDisplayGroupBox;
         private System.Windows.Forms.Button manuallyGeneratePathButton;
         private System.Windows.Forms.GroupBox createReportsGroupBox;
+        private System.Windows.Forms.Button button1;
     }
 }
 

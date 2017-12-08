@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace GHAR_WindowsApp
 {
-    public partial class HelpForm : Form
+    public partial class HelpVideoForm : Form
     {
-        public HelpForm()
+        public HelpVideoForm()
         {
             InitializeComponent();
+        }
+
+        void HelpVideoForm_Load(object sender, EventArgs e)
+        {
+            helpVideoMediaPlayer.URL = @"C:\Users\Boweeton\Desktop\test1.webm";
         }
     }
 }

@@ -118,5 +118,11 @@ namespace GHAR_WindowsApp
                 nothingChangedMessage.Text = "No data was different";
             }
         }
+
+        void button1_Click(object sender, EventArgs e)
+        {
+            HelpVideoForm f = new HelpVideoForm();
+            f.Show();
+        }
     }
 }
