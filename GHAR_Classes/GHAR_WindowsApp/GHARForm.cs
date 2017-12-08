@@ -35,17 +35,25 @@ namespace GHAR_WindowsApp
 
         void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
         {
-            using (ManualPathForm m = new ManualPathForm(rm))
+            using (ManualPathForm f = new ManualPathForm(rm))
             {
                 //m.Show();
-                if (m.ShowDialog() == DialogResult.OK)
+                if (f.ShowDialog() == DialogResult.OK)
                 {
                 }
             }
             UpdateResultsBanner();
 
-            createOvernightsButton.Enabled = true;
-            createDayEventsButton.Enabled = true;
+            if (rm.IncompleteDataLoad)
+            {
+                createOvernightsButton.Enabled = false;
+                createDayEventsButton.Enabled = false;
+            }
+            else
+            {
+                createOvernightsButton.Enabled = true;
+                createDayEventsButton.Enabled = true;
+            }
 
             UpdateLastRunText();
         }
