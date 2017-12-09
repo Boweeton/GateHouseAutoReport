@@ -38,7 +38,8 @@
             this.nothingChangedMessage = new System.Windows.Forms.TextBox();
             this.resultsDisplayGroupBox = new System.Windows.Forms.GroupBox();
             this.createReportsGroupBox = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.helpButton = new System.Windows.Forms.Button();
+            this.printJustTeasAndToursCheckbox = new System.Windows.Forms.CheckBox();
             this.buttonsGroup.SuspendLayout();
             this.lastRunBox.SuspendLayout();
             this.resultsDisplayGroupBox.SuspendLayout();
@@ -48,7 +49,7 @@
             // createDayEventsButton
             // 
             this.createDayEventsButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createDayEventsButton.Location = new System.Drawing.Point(7, 80);
+            this.createDayEventsButton.Location = new System.Drawing.Point(7, 115);
             this.createDayEventsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createDayEventsButton.Name = "createDayEventsButton";
             this.createDayEventsButton.Size = new System.Drawing.Size(228, 53);
@@ -60,7 +61,7 @@
             // createOvernightsButton
             // 
             this.createOvernightsButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.createOvernightsButton.Location = new System.Drawing.Point(7, 22);
+            this.createOvernightsButton.Location = new System.Drawing.Point(7, 57);
             this.createOvernightsButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createOvernightsButton.Name = "createOvernightsButton";
             this.createOvernightsButton.Size = new System.Drawing.Size(228, 53);
@@ -139,33 +140,45 @@
             // 
             // createReportsGroupBox
             // 
+            this.createReportsGroupBox.Controls.Add(this.printJustTeasAndToursCheckbox);
             this.createReportsGroupBox.Controls.Add(this.createDayEventsButton);
             this.createReportsGroupBox.Controls.Add(this.createOvernightsButton);
-            this.createReportsGroupBox.Location = new System.Drawing.Point(27, 239);
+            this.createReportsGroupBox.Location = new System.Drawing.Point(27, 238);
             this.createReportsGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.createReportsGroupBox.Name = "createReportsGroupBox";
             this.createReportsGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.createReportsGroupBox.Size = new System.Drawing.Size(244, 142);
+            this.createReportsGroupBox.Size = new System.Drawing.Size(244, 182);
             this.createReportsGroupBox.TabIndex = 10;
             this.createReportsGroupBox.TabStop = false;
             this.createReportsGroupBox.Text = "Generate Reports";
             // 
-            // button1
+            // helpButton
             // 
-            this.button1.Location = new System.Drawing.Point(51, 422);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(177, 74);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.helpButton.Location = new System.Drawing.Point(27, 452);
+            this.helpButton.Name = "helpButton";
+            this.helpButton.Size = new System.Drawing.Size(75, 30);
+            this.helpButton.TabIndex = 11;
+            this.helpButton.Text = "Help";
+            this.helpButton.UseVisualStyleBackColor = true;
+            this.helpButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // printJustTeasAndToursCheckbox
+            // 
+            this.printJustTeasAndToursCheckbox.AutoSize = true;
+            this.printJustTeasAndToursCheckbox.Location = new System.Drawing.Point(8, 23);
+            this.printJustTeasAndToursCheckbox.Name = "printJustTeasAndToursCheckbox";
+            this.printJustTeasAndToursCheckbox.Size = new System.Drawing.Size(214, 21);
+            this.printJustTeasAndToursCheckbox.TabIndex = 3;
+            this.printJustTeasAndToursCheckbox.Text = "Display Only Teas and Tours";
+            this.printJustTeasAndToursCheckbox.UseVisualStyleBackColor = true;
+            this.printJustTeasAndToursCheckbox.CheckedChanged += new System.EventHandler(this.OnPrintJustTeasAndToursCheckboxCheckedChanged);
             // 
             // MainScreenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 541);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(297, 508);
+            this.Controls.Add(this.helpButton);
             this.Controls.Add(this.createReportsGroupBox);
             this.Controls.Add(this.resultsDisplayGroupBox);
             this.Controls.Add(this.lastRunBox);
@@ -185,6 +198,7 @@
             this.resultsDisplayGroupBox.ResumeLayout(false);
             this.resultsDisplayGroupBox.PerformLayout();
             this.createReportsGroupBox.ResumeLayout(false);
+            this.createReportsGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -199,7 +213,8 @@
         private System.Windows.Forms.GroupBox resultsDisplayGroupBox;
         private System.Windows.Forms.Button manuallyGeneratePathButton;
         private System.Windows.Forms.GroupBox createReportsGroupBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button helpButton;
+        private System.Windows.Forms.CheckBox printJustTeasAndToursCheckbox;
     }
 }
 

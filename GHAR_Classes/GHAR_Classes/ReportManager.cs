@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
 namespace GHAR_Classes
@@ -13,11 +14,11 @@ namespace GHAR_Classes
 
         // Local Data
         const int PageWidth = 68;
+
         const int NameLength = 16;
         const int EndOfNameIndex = 28;
         const int MaxTourSize = 25;
         List<RosterReservation> lastRun = new List<RosterReservation>();
-        List<EventRoster> oldList; // old
 
         #endregion
 
@@ -31,15 +32,24 @@ namespace GHAR_Classes
 
         // Reporting Data
         public int DayPasseCount { get; set; }
+
         public int OvernightPassCount { get; set; }
 
         // Data
+        public bool PrintJustTeasAndTours { get; set; }
+
         public string[] FileLines { get; set; }
+
         public bool IncompleteDataLoad { get; set; }
+
         public bool ChangedAtLastRun { get; set; }
+
         public string ToursReportPath { get; set; }
+
         public string OtherArrivalsReportPath { get; set; }
+
         public List<RosterReservation> AllReservations { get; set; } = new List<RosterReservation>();
+
         public List<OvPassRecord> OvPassRecords { get; set; }
 
         #endregion
@@ -229,6 +239,7 @@ namespace GHAR_Classes
 
             // Calculate Overnight Passes
             OvPassRecords = new List<OvPassRecord>();
+
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (RosterReservation res in AllReservations)
             {
@@ -290,7 +301,7 @@ namespace GHAR_Classes
             // Print header
             sb.Append($"{"Name",-OffsetAfterName}{"Count",-OffsetAfterCount}");
             BuffInsert("O-Events", offsetAfterMEventCode);
-            sb.AppendLine($"{"Time",-OffsetAfterTime}{"Type", -OffsetAfterType}");
+            sb.AppendLine($"{"Time",-OffsetAfterTime}{"Type",-OffsetAfterType}");
             sb.AppendLine();
 
             // Print the partition
@@ -305,9 +316,10 @@ namespace GHAR_Classes
             int passCount = 0;
             for (int i = 0; i < AllReservations.Count; i++)
             {
-                if (AllReservations[i].Type != GuestType.Overnight)
+                if ((!PrintJustTeasAndTours && AllReservations[i].Type != GuestType.Overnight) ||
+                    (PrintJustTeasAndTours && (AllReservations[i].Type == GuestType.Tea || AllReservations[i].Type == GuestType.Tour)))
                 {
-                    // Print the current data
+                    // Print the current event
                     for (int j = 0; j < AllReservations[i].EntryCount; j++)
                     {
                         if (j == 0)
@@ -334,17 +346,18 @@ namespace GHAR_Classes
                         if (AllReservations[i].Type == GuestType.Tour && AllReservations[i + 1].Type != GuestType.Tour)
                         {
                             sb.AppendLine();
-                            sb.AppendLine($"Total: {headCount}\tRemaining: {MaxTourSize-headCount}\t({passCount} Passes)");
+                            sb.AppendLine($"Total: {headCount}\tRemaining: {MaxTourSize - headCount}\t({passCount} Passes)");
                             passCount = 0;
                             headCount = 0;
 
                             // Print the partition
-                            for (int j = 0; j < PageWidth/2; j++)
+                            for (int j = 0; j < PageWidth / 2; j++)
                             {
                                 sb.Append("- ");
                             }
                             sb.AppendLine();
                         }
+
                         // Info for after not tour
                         else if (AllReservations[i].Type != AllReservations[i + 1].Type)
                         {
@@ -352,9 +365,9 @@ namespace GHAR_Classes
                             sb.AppendLine($"({passCount} Passes)");
                             passCount = 0;
                             headCount = 0;
-                            
+
                             // Print the partition
-                            for (int j = 0; j < PageWidth/2; j++)
+                            for (int j = 0; j < PageWidth / 2; j++)
                             {
                                 sb.Append("- ");
                             }
@@ -372,12 +385,13 @@ namespace GHAR_Classes
                             headCount = 0;
 
                             // Print the partition
-                            for (int j = 0; j < PageWidth/2; j++)
+                            for (int j = 0; j < PageWidth / 2; j++)
                             {
                                 sb.Append("- ");
                             }
                             sb.AppendLine();
                         }
+
                         // Print not tour info
                         else
                         {
@@ -387,12 +401,13 @@ namespace GHAR_Classes
                             headCount = 0;
 
                             // Print the partition
-                            for (int j = 0; j < PageWidth/2; j++)
+                            for (int j = 0; j < PageWidth / 2; j++)
                             {
                                 sb.Append("- ");
                             }
                             sb.AppendLine();
                         }
+
                     }
                 }
             }
@@ -511,7 +526,8 @@ namespace GHAR_Classes
         public string GeneratePath(string reportName, string date)
         {
             Directory.CreateDirectory(Constants.RawDataReportsFolder);
-            return Path.GetFullPath(Path.Combine(Constants.RawDataReportsFolder, $"AutoReport[{reportName}]_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt"));
+            return Path.GetFullPath(Path.Combine(Constants.RawDataReportsFolder,
+                $"AutoReport[{reportName}]_[RptOf{date.Replace('/', '.')}]_[CrtOn{DateTime.Today.Date:M-d-yy}--{DateTime.Now:h.mm.sstt}].txt"));
         }
 
         #endregion

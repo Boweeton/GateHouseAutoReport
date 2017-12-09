@@ -31,6 +31,9 @@ namespace GHAR_WindowsApp
             nothingChangedMessage.Text = string.Empty;
             nothingChangedMessage.BackColor = BackColor;
             nothingChangedMessage.ForeColor = Color.White;
+            printJustTeasAndToursCheckbox.Checked = true;
+            printJustTeasAndToursCheckbox.Enabled = false;
+            rm.PrintJustTeasAndTours = true;
         }
 
         void OnManuallyGeneratePathButtonClick(object sender, EventArgs e)
@@ -48,11 +51,13 @@ namespace GHAR_WindowsApp
             {
                 createOvernightsButton.Enabled = false;
                 createDayEventsButton.Enabled = false;
+                printJustTeasAndToursCheckbox.Enabled = false;
             }
             else
             {
                 createOvernightsButton.Enabled = true;
                 createDayEventsButton.Enabled = true;
+                printJustTeasAndToursCheckbox.Enabled = true;
             }
 
             UpdateLastRunText();
@@ -123,6 +128,11 @@ namespace GHAR_WindowsApp
         {
             HelpVideoForm f = new HelpVideoForm();
             f.Show();
+        }
+
+        void OnPrintJustTeasAndToursCheckboxCheckedChanged(object sender, EventArgs e)
+        {
+            rm.PrintJustTeasAndTours = printJustTeasAndToursCheckbox.Checked;
         }
     }
 }

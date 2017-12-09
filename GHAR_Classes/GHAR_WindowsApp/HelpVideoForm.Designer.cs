@@ -39,14 +39,14 @@
             this.helpVideoMediaPlayer.Location = new System.Drawing.Point(13, 13);
             this.helpVideoMediaPlayer.Name = "helpVideoMediaPlayer";
             this.helpVideoMediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("helpVideoMediaPlayer.OcxState")));
-            this.helpVideoMediaPlayer.Size = new System.Drawing.Size(911, 449);
+            this.helpVideoMediaPlayer.Size = new System.Drawing.Size(790, 455);
             this.helpVideoMediaPlayer.TabIndex = 0;
             // 
             // HelpVideoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 474);
+            this.ClientSize = new System.Drawing.Size(1082, 588);
             this.Controls.Add(this.helpVideoMediaPlayer);
             this.Name = "HelpVideoForm";
             this.Text = "HelpForm";

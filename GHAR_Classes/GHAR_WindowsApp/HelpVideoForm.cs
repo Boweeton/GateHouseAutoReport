@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
+using GHAR_Classes;
+using WMPLib;
 
 namespace GHAR_WindowsApp
 {
@@ -19,7 +15,10 @@ namespace GHAR_WindowsApp
 
         void HelpVideoForm_Load(object sender, EventArgs e)
         {
-            helpVideoMediaPlayer.URL = @"C:\Users\Boweeton\Desktop\test1.webm";
+            string videoPath = Path.GetFullPath(Path.Combine(Constants.MediaFolder, @"gharHelpVideo.mp4"));
+
+            helpVideoMediaPlayer.URL = videoPath;
+            helpVideoMediaPlayer.Ctlcontrols.stop();
         }
     }
 }
